@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Dock } from "@/widgets/Dock";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning className="dark h-screen">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full min-h-screen`}
       >
         {children}
+        <Dock className="fixed bottom-0 left-0 right-0" />
       </body>
     </html>
   );
