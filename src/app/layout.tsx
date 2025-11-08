@@ -24,12 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark h-screen">
+    <html lang="en" suppressHydrationWarning className="dark h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full min-h-screen w-full`}
       >
         {children}
-        <Dock className="fixed bottom-0 left-0 right-0" />
+        <Dock className="fixed bottom-0 left-0 right-0 z-50" />
       </body>
     </html>
   );

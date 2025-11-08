@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: ["cdn.europosters.eu"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.europosters.eu",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -2,3 +2,8 @@ export * from "./button";
 export * from "./menu-dock";
 export * from "./layout";
 export * from "./page";
+export * from "./text";
+export * from "./badge";
+export * from "./qr-code";
+export * from "./progress";
+export * from "./embla/carousel";

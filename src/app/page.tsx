@@ -1,5 +1,5 @@
-import { TicketsPage } from "@/pages/tickets";
+import { EventTicketsPage } from "@/pages/events";
 
 export default function Home() {
-  return <TicketsPage />;
+  return <EventTicketsPage />;
 }
