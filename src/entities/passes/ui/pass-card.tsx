@@ -9,6 +9,8 @@ import { Progress } from "@/shared/ui/progress";
 import { Badge } from "@/shared/ui/badge";
 import QRCodeStyling from "qr-code-styling";
 import AppLogo from "@/shared/assets/logo.jpg";
+import { Clock } from "lucide-react";
+import { formatValidDateTime } from "../lib/formatValidDate";
 
 interface IProps {
   className?: string;
@@ -78,6 +80,9 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
       qrCodeRef.current.append(ref.current);
     }
   }, [data]);
+  const userLocale = useMemo(() => {
+    return navigator.language;
+  }, []);
 
   return (
     <div
@@ -103,6 +108,15 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
         <Text className="text-base font-semibold tracking-tight">
           {pass.name}
         </Text>
+        {pass.validFrom || pass.validTo ? (
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-muted-foreground" />
+            <Text className="text-muted-foreground text-xs">
+              {formatValidDateTime(pass.validFrom || "", userLocale)} -{" "}
+              {formatValidDateTime(pass.validTo || "", userLocale)}
+            </Text>
+          </div>
+        ) : null}
       </div>
       <div className="size-85 rounded-xl bg-card p-3 ring-1 ring-border shadow-sm flex justify-center items-center">
         <div ref={ref} className="rounded-lg overflow-hidden" />

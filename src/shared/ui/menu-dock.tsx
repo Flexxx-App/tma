@@ -106,7 +106,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
     switch (variant) {
       case "compact":
         return {
-          container: "p-1",
+          container: "p-0",
           item: "p-2 min-w-12",
           icon: "h-4 w-4",
           text: "text-xs",

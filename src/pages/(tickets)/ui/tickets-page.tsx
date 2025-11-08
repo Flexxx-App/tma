@@ -26,6 +26,8 @@ const mockPasses: IPass[] = [
     createdAt: "2025-01-02",
     secret: "1234567890",
     status: "active",
+    validFrom: "2025-01-01T00:00:00Z", // время в UTC
+    validTo: "2025-01-01T23:59:59Z", // время в UTC
   },
   {
     id: "3",
