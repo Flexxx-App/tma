@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Home, Briefcase, Calendar, Shield, Settings } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
+import { useRouter } from "next/navigation";
 
 type IconComponentType = React.ElementType<{ className?: string }>;
 
@@ -10,6 +11,7 @@ export interface MenuDockItem {
   label: string;
   icon: IconComponentType;
   onClick?: () => void;
+  href?: string;
 }
 
 export interface MenuDockProps {
@@ -37,6 +39,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   showLabels = true,
   animated = true,
 }) => {
+  const router = useRouter();
   const finalItems = useMemo(() => {
     const isValid =
       items && Array.isArray(items) && items.length >= 2 && items.length <= 8;
@@ -99,7 +102,11 @@ export const MenuDock: React.FC<MenuDockProps> = ({
 
   const handleItemClick = (index: number, item: MenuDockItem) => {
     setActiveIndex(index);
-    item.onClick?.();
+    if (item.href) {
+      router.push(item.href);
+    } else {
+      item.onClick?.();
+    }
   };
 
   const getVariantStyles = () => {

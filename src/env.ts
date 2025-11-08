@@ -23,7 +23,7 @@ export async function mockEnv(): Promise<void> {
           const noInsets = { left: 0, top: 0, bottom: 0, right: 0 } as const;
 
           mockTelegramEnv({
-            onEvent(e: [string, unknown], next: () => void): void {
+            onEvent(e: [string, unknown]): void {
               if (
                 e[0] === "web_app_request_theme" &&
                 typeof e[0] === "string"

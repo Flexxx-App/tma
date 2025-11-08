@@ -7,3 +7,6 @@ export * from "./badge";
 export * from "./qr-code";
 export * from "./progress";
 export * from "./embla/carousel";
+export * from "./avatar";
+export * from "./particles";
+export * from "./item";

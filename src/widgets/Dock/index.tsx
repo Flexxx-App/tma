@@ -8,12 +8,12 @@ const menuItems: MenuDockItem[] = [
   {
     label: "tickets",
     icon: Ticket,
-    onClick: () => console.log("Tickets clicked"),
+    href: "/",
   },
   {
     label: "profile",
     icon: User,
-    onClick: () => console.log("Profile clicked"),
+    href: "/profile",
   },
 ];
 
