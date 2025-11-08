@@ -2,12 +2,13 @@
 
 import { cn } from "@/shared/lib/utils";
 import { IPass } from "../model/types";
-import { QRCode } from "@/shared/ui/qr-code";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { generateTOTP } from "../lib/totp-generator";
 import { Text } from "@/shared/ui/text";
 import { Progress } from "@/shared/ui/progress";
 import { Badge } from "@/shared/ui/badge";
+import QRCodeStyling from "qr-code-styling";
+import AppLogo from "@/shared/assets/logo.jpg";
 
 interface IProps {
   className?: string;
@@ -22,6 +23,8 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
     const now = Math.floor(Date.now() / 1000);
     return timeStep - (now % timeStep);
   });
+  const ref = useRef<HTMLDivElement>(null);
+  const qrCodeRef = useRef<QRCodeStyling>(null);
 
   useEffect(() => {
     const update = () => {
@@ -38,15 +41,43 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
     return () => clearInterval(interval);
   }, [secret]);
 
-  const data = {
-    pass: {
-      id: pass.id,
-      eventId: pass.eventId,
-      userId: pass.userId,
-      createdAt: pass.createdAt,
-    },
-    validationCode: code,
-  };
+  const data = useMemo(
+    () => ({
+      pass: {
+        id: pass.id,
+        eventId: pass.eventId,
+        userId: pass.userId,
+        createdAt: pass.createdAt,
+      },
+      validationCode: code,
+    }),
+    [pass.id, pass.eventId, pass.userId, pass.createdAt, code]
+  );
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.innerHTML = "";
+    }
+    if (qrCodeRef.current) {
+      qrCodeRef.current = null;
+    }
+    qrCodeRef.current = new QRCodeStyling({
+      data: JSON.stringify(data),
+      width: 275,
+      height: 275,
+      margin: 0,
+      image: AppLogo.src,
+      imageOptions: { hideBackgroundDots: true, imageSize: 0.4, margin: 10 },
+      cornersSquareOptions: { type: "extra-rounded" },
+      cornersDotOptions: { type: "rounded" },
+      backgroundOptions: { color: "#ffffff" },
+      dotsOptions: { type: "rounded" },
+    });
+
+    if (ref.current) {
+      qrCodeRef.current.append(ref.current);
+    }
+  }, [data]);
 
   return (
     <div
@@ -73,20 +104,22 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
           {pass.name}
         </Text>
       </div>
-      <div className="size-85 rounded-xl bg-card p-3 ring-1 ring-border shadow-sm">
-        <QRCode
-          data={JSON.stringify(data)}
-          className="rounded-lg overflow-hidden size-full"
-        />
+      <div className="size-85 rounded-xl bg-card p-3 ring-1 ring-border shadow-sm flex justify-center items-center">
+        <div ref={ref} className="rounded-lg overflow-hidden" />
       </div>
       <div
         suppressHydrationWarning
-        className="w-full flex flex-col items-center justify-center gap-2"
+        className="flex flex-col items-center justify-center gap-2 overflow-hidden w-full"
       >
-        <Progress value={secondsLeft} max={timeStep} className="h-1.5" />
+        <div className="w-80">
+          <Progress value={secondsLeft} max={timeStep} className="h-1.5" />
+        </div>
         <Text className="text-muted-foreground text-xs">
-          QR-code will be updated in:{" "}
-          <span className="font-mono tabular-nums">{secondsLeft}</span> seconds
+          QR-code will be rotated in:{" "}
+          <span className="font-mono tabular-nums" suppressHydrationWarning>
+            {secondsLeft}
+          </span>{" "}
+          seconds
         </Text>
       </div>
     </div>

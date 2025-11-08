@@ -6,4 +6,6 @@ export interface IPass {
   status: "active" | "scanned";
   createdAt: string;
   secret: string;
+  validFrom?: string;
+  validTo?: string;
 }

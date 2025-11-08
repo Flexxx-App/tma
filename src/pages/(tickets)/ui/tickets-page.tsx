@@ -27,6 +27,15 @@ const mockPasses: IPass[] = [
     secret: "1234567890",
     status: "active",
   },
+  {
+    id: "3",
+    eventId: "1",
+    userId: "3",
+    name: "Regular",
+    createdAt: "2025-01-03",
+    secret: "1234567890",
+    status: "active",
+  },
 ];
 
 export function TicketsPage({ className, ...props }: IProps) {

@@ -115,10 +115,10 @@ export const EmblaCarousel: React.FC<PropType> = (props) => {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex [touch-action:pan-y_pinch-zoom] ">
+        <div className="flex [touch-action:pan-y_pinch-zoom] gap-4">
           {React.Children.map(children, (child, index) => (
             <div
-              className="transform-gpu grow-0 shrink-0 basis-[100%] md:basis-[40%] min-w-0 flex justify-center "
+              className="transform-gpu grow-0 shrink-0 basis-[50%] min-w-0 flex justify-center"
               key={index}
             >
               <div className="embla__slide__number w-full [backface-visibility:hidden] origin-center transition-[transform,opacity] duration-300 ease-out will-change-transform">
