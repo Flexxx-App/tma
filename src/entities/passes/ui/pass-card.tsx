@@ -27,6 +27,8 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
   });
   const ref = useRef<HTMLDivElement>(null);
   const qrCodeRef = useRef<QRCodeStyling>(null);
+  const [isFading, setIsFading] = useState(false);
+  const fadeDurationMs = 250;
 
   useEffect(() => {
     const update = () => {
@@ -56,15 +58,11 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
     [pass.id, pass.eventId, pass.userId, pass.createdAt, code]
   );
 
+  // Create QR instance once
   useEffect(() => {
-    if (ref.current) {
-      ref.current.innerHTML = "";
-    }
-    if (qrCodeRef.current) {
-      qrCodeRef.current = null;
-    }
+    if (qrCodeRef.current) return;
     qrCodeRef.current = new QRCodeStyling({
-      data: JSON.stringify(data),
+      data: "{}", // initial placeholder, will be updated below
       width: 275,
       height: 275,
       margin: 0,
@@ -75,10 +73,23 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
       backgroundOptions: { color: "#ffffff" },
       dotsOptions: { type: "rounded" },
     });
-
     if (ref.current) {
       qrCodeRef.current.append(ref.current);
     }
+  }, []);
+
+  // Smoothly update QR data with fade transition
+  useEffect(() => {
+    if (!qrCodeRef.current) return;
+    const start = window.setTimeout(() => setIsFading(true), 0);
+    const t = window.setTimeout(() => {
+      qrCodeRef.current?.update({ data: JSON.stringify(data) });
+      setIsFading(false);
+    }, fadeDurationMs);
+    return () => {
+      window.clearTimeout(start);
+      window.clearTimeout(t);
+    };
   }, [data]);
   const userLocale = useMemo(() => {
     return navigator.language;
@@ -119,7 +130,13 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
         ) : null}
       </div>
       <div className="size-85 rounded-xl bg-card p-3 ring-1 ring-border shadow-sm flex justify-center items-center">
-        <div ref={ref} className="rounded-lg overflow-hidden" />
+        <div
+          ref={ref}
+          className={cn(
+            "rounded-lg overflow-hidden transition-opacity duration-300 ease-in-out will-change-auto",
+            isFading ? "opacity-0" : "opacity-100"
+          )}
+        />
       </div>
       <div
         suppressHydrationWarning
