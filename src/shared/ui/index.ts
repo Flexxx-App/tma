@@ -10,3 +10,5 @@ export * from "./embla/carousel";
 export * from "./avatar";
 export * from "./particles";
 export * from "./item";
+export * from "./banner";
+export * from "./hover-border-gradient";

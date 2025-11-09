@@ -25,11 +25,22 @@ export const EventCard: React.FC<IProps> = ({ event, className, ...props }) => {
   return (
     <div
       className={cn(
-        "flex gap-4 bg-card px-6 py-4 rounded-md w-full items-center justify-between hover:bg-accent/50 transition-all cursor-pointer",
+        "relative overflow-hidden",
+        "flex gap-4 px-6 py-4 rounded-md w-full items-center justify-between transition-colors duration-300 hover:bg-accent/50 cursor-pointer",
+        "bg-card/30",
         className
       )}
       {...props}
     >
+      <div
+        className={cn(
+          "absolute inset-0 -z-10",
+          "bg-cover bg-center bg-no-repeat",
+          "blur-2xl scale-110 opacity-60"
+        )}
+        style={{ backgroundImage: `url(${posterUrl})` }}
+      />
+
       <div className="flex gap-4 ">
         <Image
           src={posterUrl}
