@@ -98,7 +98,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
   return (
     <div
       className={cn(
-        "w-fit mx-auto max-w-md rounded-2xl border bg-card/30 backdrop-blur p-6 shadow-sm",
+        "w-fit mx-auto max-w-md border rounded-2xl bg-card/50 backdrop-blur p-6 shadow-sm",
         "flex flex-col items-center justify-center gap-6",
         className
       )}
@@ -129,7 +129,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
           </div>
         ) : null}
       </div>
-      <div className="size-60 rounded-xl bg-card p-2 ring-1 ring-border shadow-sm flex justify-center items-center">
+      <div className="size-60 rounded-xl bg-card p-2 ring-border shadow-sm flex justify-center items-center">
         <div
           ref={ref}
           className={cn(
