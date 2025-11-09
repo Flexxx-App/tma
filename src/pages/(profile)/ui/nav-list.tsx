@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   ShoppingBagIcon,
   ChevronRightIcon,
@@ -17,22 +16,26 @@ import {
   Button,
 } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
+import Link from "next/link";
 
 const navListItems = [
   {
     label: "Orders",
     icon: ShoppingBagIcon,
     description: "View your orders",
+    href: "/orders",
   },
   {
     label: "Payment Methods",
     icon: CreditCardIcon,
     description: "Manage your payment methods",
+    href: "/payment-methods",
   },
   {
     label: "Help",
     icon: HelpCircleIcon,
     description: "Get help with your account",
+    href: process.env.NEXT_PUBLIC_HELP_URL,
   },
 ];
 
@@ -45,14 +48,14 @@ export function NavList({ className }: IProps) {
     <div className={cn("flex w-full flex-col gap-6", className)}>
       <ItemGroup className="bg-card/40 rounded-md">
         {navListItems.map((item, index) => (
-          <React.Fragment key={item.label}>
-            <Item className="hover:bg-card/50 transition-colors duration-100 py-3">
+          <Link href={item.href ?? ""} key={item.label}>
+            <Item className="py-2 hover:bg-card/50 transition-colors duration-100">
               <ItemMedia className="size-8 bg-white/20! rounded-md p-2">
                 <item.icon className="size-6" />
               </ItemMedia>
               <ItemContent className="gap-0">
                 <ItemTitle>{item.label}</ItemTitle>
-                <ItemDescription className="text-sm!">
+                <ItemDescription className="text-sm! hidden sm:block">
                   {item.description}
                 </ItemDescription>
               </ItemContent>
@@ -63,9 +66,9 @@ export function NavList({ className }: IProps) {
               </ItemActions>
             </Item>
             {index !== navListItems.length - 1 && (
-              <ItemSeparator className="w-[88%]! ml-auto" />
+              <ItemSeparator className="w-[80%]! ml-auto sm:w-[88%]" />
             )}
-          </React.Fragment>
+          </Link>
         ))}
       </ItemGroup>
     </div>

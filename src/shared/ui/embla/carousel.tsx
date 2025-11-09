@@ -20,6 +20,7 @@ type PropType = {
 
 export const EmblaCarousel: React.FC<PropType> = (props) => {
   const { children, options } = props;
+  const childrenCount = React.Children.count(children);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "center",
     containScroll: "trimSnaps",
@@ -106,11 +107,21 @@ export const EmblaCarousel: React.FC<PropType> = (props) => {
     if (!emblaApi) return;
     const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
     const onReInit = () => {
-      setScrollSnaps(emblaApi.scrollSnapList());
+      const snaps = emblaApi.scrollSnapList();
+      setScrollSnaps(
+        snaps.length > 0
+          ? snaps
+          : Array.from({ length: childrenCount }, (_, i) => i)
+      );
       onSelect();
     };
     emblaApi.on("select", onSelect).on("reInit", onReInit).on("init", onReInit);
-  }, [emblaApi]);
+  }, [emblaApi, childrenCount]);
+
+  const snapsForRender =
+    scrollSnaps.length > 0
+      ? scrollSnaps
+      : Array.from({ length: childrenCount }, (_, i) => i);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -128,9 +139,9 @@ export const EmblaCarousel: React.FC<PropType> = (props) => {
           ))}
         </div>
       </div>
-      {scrollSnaps.length > 1 && (
+      {snapsForRender.length > 1 && (
         <div className="mt-4 flex items-center justify-center gap-2">
-          {scrollSnaps.map((_, i) => (
+          {snapsForRender.map((_, i) => (
             <button
               key={i}
               type="button"

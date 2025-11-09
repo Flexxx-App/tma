@@ -63,8 +63,8 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
     if (qrCodeRef.current) return;
     qrCodeRef.current = new QRCodeStyling({
       data: "{}", // initial placeholder, will be updated below
-      width: 275,
-      height: 275,
+      width: 200,
+      height: 200,
       margin: 0,
       image: AppLogo.src,
       imageOptions: { hideBackgroundDots: true, imageSize: 0.4, margin: 10 },
@@ -98,7 +98,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
   return (
     <div
       className={cn(
-        "w-full max-w-md mx-auto rounded-2xl border bg-card/30 backdrop-blur p-6 shadow-sm",
+        "w-fit mx-auto max-w-md rounded-2xl border bg-card/30 backdrop-blur p-6 shadow-sm",
         "flex flex-col items-center justify-center gap-6",
         className
       )}
@@ -129,7 +129,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
           </div>
         ) : null}
       </div>
-      <div className="size-85 rounded-xl bg-card p-3 ring-1 ring-border shadow-sm flex justify-center items-center">
+      <div className="size-60 rounded-xl bg-card p-2 ring-1 ring-border shadow-sm flex justify-center items-center">
         <div
           ref={ref}
           className={cn(
@@ -142,7 +142,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
         suppressHydrationWarning
         className="flex flex-col items-center justify-center gap-2 overflow-hidden w-full"
       >
-        <div className="w-80">
+        <div className="w-55">
           <Progress value={secondsLeft} max={timeStep} className="h-1.5" />
         </div>
         <Text className="text-muted-foreground text-xs">

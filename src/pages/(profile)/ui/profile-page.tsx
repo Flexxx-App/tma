@@ -12,8 +12,9 @@ import {
   BannerDescription,
 } from "@/shared/ui";
 import { ScanFace } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 export const ProfilePage = () => {
+  const router = useRouter();
   return (
     <Page className="flex flex-col">
       <UserInfoWidget
@@ -28,8 +29,8 @@ export const ProfilePage = () => {
             <BannerIcon icon={ScanFace} />
             <div className="flex flex-col">
               <BannerTitle className="font-semibold">FaceTix</BannerTitle>
-              <BannerDescription className="text-[#444444]">
-                Connect your FaceID to enter events faster
+              <BannerDescription className="text-[#444444] hidden sm:block">
+                Connect FaceID to enter events faster & easier
               </BannerDescription>
             </div>
           </div>
@@ -41,6 +42,9 @@ export const ProfilePage = () => {
       <Button
         className="absolute right-4 p-2! h-8 top-4 rounded-full! border-none text-md text-muted-foreground hover:bg-transparent hover:text-foreground"
         variant="outline"
+        onClick={() => {
+          router.push("/profile/edit");
+        }}
       >
         <PencilIcon className="size-4" />
       </Button>
