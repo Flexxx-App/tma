@@ -13,6 +13,7 @@ import {
 } from "@/shared/ui";
 import { ScanFace } from "lucide-react";
 import { useRouter } from "next/navigation";
+
 export const ProfilePage = () => {
   const router = useRouter();
   return (
@@ -34,7 +35,13 @@ export const ProfilePage = () => {
               </BannerDescription>
             </div>
           </div>
-          <BannerAction>Connect</BannerAction>
+          <BannerAction
+            onClick={() => {
+              router.push("/facetix");
+            }}
+          >
+            Connect
+          </BannerAction>
         </Banner>
       </div>
 

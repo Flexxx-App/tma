@@ -42,13 +42,13 @@ const mockTickets: ITicket[] = [
 export const GuestInfoPage = ({ id }: { id: string }) => {
   return (
     <Page className="flex flex-col gap-4 p-4">
-      <div className="flex flex-col items-center gap-4 pt-6">
+      <div className="flex flex-col items-center gap-3 pt-6">
         <Avatar className="size-32">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <div className="flex flex-col items-center">
-          <Text>John Doe</Text>
+          <Text className="text-lg">John Doe</Text>
           <Text className="text-sm text-muted-foreground">@john.doe</Text>
         </div>
       </div>
