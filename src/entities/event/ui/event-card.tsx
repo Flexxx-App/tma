@@ -47,7 +47,7 @@ export const EventCard: React.FC<IProps> = ({ event, className, ...props }) => {
           alt={title}
           width={80}
           height={80}
-          className="w-20 h-20 object-cover rounded-sm aspect-square"
+          className="w-20 h-20 object-cover rounded-sm aspect-square sm:block hidden"
         />
         <div className="flex flex-col gap-1">
           <Badge

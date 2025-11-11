@@ -1,0 +1,44 @@
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  Page,
+} from "@/shared/ui";
+import { SearchIcon } from "lucide-react";
+import { IGuest } from "@/entities/guest/model/types";
+import { GuestList } from "./guest-list";
+
+const guests: IGuest[] = [
+  {
+    id: "1",
+    name: "John Doe",
+    email: "john.doe@example.com",
+    phone: "1234567890",
+    status: "active",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    avatarUrl: "https://github.com/shadcn.png",
+  },
+  {
+    id: "2",
+    name: "Jane Doe",
+    email: "jane.doe@example.com",
+    phone: "1234567890",
+    status: "active",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    avatarUrl: "https://github.com/shadcn.png",
+  },
+];
+
+export const GuestsPage = () => {
+  return (
+    <Page className="p-4 space-y-4 flex flex-col">
+      <InputGroup>
+        <InputGroupInput placeholder="Search by email, name..." />
+        <InputGroupAddon align="inline-start">
+          <SearchIcon className="size-4" />
+        </InputGroupAddon>
+      </InputGroup>
+      <GuestList guests={guests} />
+    </Page>
+  );
+};

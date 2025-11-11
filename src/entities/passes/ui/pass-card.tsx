@@ -99,7 +99,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
     <div
       className={cn(
         "w-fit mx-auto max-w-md border rounded-2xl bg-card/50 backdrop-blur p-6 shadow-sm",
-        "flex flex-col items-center justify-center gap-6",
+        "flex flex-col items-center justify-center gap-2",
         className
       )}
       {...props}
