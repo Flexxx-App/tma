@@ -1,5 +1,10 @@
 import { Page } from "@/shared/ui";
+import { FaceAuth } from "./faceauth";
 
 export const ConnectPage = () => {
-  return <Page>ConnectPage</Page>;
+  return (
+    <Page>
+      <FaceAuth />
+    </Page>
+  );
 };

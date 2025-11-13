@@ -5,7 +5,7 @@ import {
   Rocket,
   WifiOff,
   Gavel,
-  CreditCard,
+  Nfc,
 } from "lucide-react";
 import { Text } from "@/shared/ui";
 
@@ -33,7 +33,7 @@ const FEATURES = [
   {
     title: "Cashless Payments",
     description: "No need to carry cash, just show your face",
-    icon: CreditCard,
+    icon: Nfc,
   },
 ];
 
