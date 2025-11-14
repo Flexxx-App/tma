@@ -27,18 +27,6 @@ const navListItems = [
     href: "/orders",
   },
   {
-    label: "Payment Methods",
-    icon: CreditCardIcon,
-    description: "Manage your payment methods",
-    href: "/payment-methods",
-  },
-  {
-    label: "Settings",
-    icon: SettingsIcon,
-    description: "App settings",
-    href: "/settings",
-  },
-  {
     label: "Help",
     icon: HelpCircleIcon,
     description: "Get help with your account",

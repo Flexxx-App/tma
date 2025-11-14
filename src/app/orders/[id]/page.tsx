@@ -1,10 +1,15 @@
-import { OrderPage as OrderPageComponent } from "@/pages/(orders)/order-page";
+"use client";
 
-export default async function OrderPage({
+import { OrderPage as OrderPageComponent } from "@/pages/(orders)/order-page";
+import { useBackButton } from "@/shared/tma/useBackButton";
+import React from "react";
+
+export default function OrderPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id } = React.use(params);
+  useBackButton();
   return <OrderPageComponent id={id} />;
 }

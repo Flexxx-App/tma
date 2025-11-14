@@ -1,5 +1,8 @@
+"use client";
 import { OrderListPage as OrderListPageComponent } from "@/pages/(orders)/order-list";
+import { useBackButton } from "@/shared/tma/useBackButton";
 
-export default async function OrdersPage() {
+export default function OrdersPage() {
+  useBackButton();
   return <OrderListPageComponent />;
 }

@@ -1,5 +1,9 @@
-import { ConnectPage as ConnectPageComponent } from "@/pages/(facetix)/connect/ui/connect-page";
+"use client";
 
-export default async function ConnectPage() {
+import { ConnectPage as ConnectPageComponent } from "@/pages/(facetix)/connect/ui/connect-page";
+import { useBackButton } from "@/shared/tma/useBackButton";
+
+export function ConnectPage() {
+  useBackButton();
   return <ConnectPageComponent />;
 }

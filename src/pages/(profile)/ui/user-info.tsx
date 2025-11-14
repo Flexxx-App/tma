@@ -17,11 +17,11 @@ export const UserInfoWidget = ({
   return (
     <div
       className={cn(
-        "flex items-center gap-3 p-4 justify-center flex-col",
+        "flex items-center gap-2 p-4 justify-center flex-col",
         className
       )}
     >
-      <Avatar className="size-32">
+      <Avatar className="size-24">
         <AvatarImage src={avatar} />
         <AvatarFallback>{name.charAt(0)}</AvatarFallback>
       </Avatar>

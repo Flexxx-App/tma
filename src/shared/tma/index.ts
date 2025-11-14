@@ -1,18 +1,15 @@
 import {
   setDebug,
-  mountBackButton,
-  restoreInitData,
   init as initSDK,
-  mountMiniAppSync,
-  bindThemeParamsCssVars,
-  mountViewport,
-  bindViewportCssVars,
   mockTelegramEnv,
   type ThemeParams,
-  themeParamsState,
-  retrieveLaunchParams,
   emitEvent,
-} from "@telegram-apps/sdk-react";
+  backButton,
+  mainButton,
+  swipeBehavior,
+  viewport,
+  secondaryButton
+} from "@tma.js/sdk";
 
 export async function init(options: {
   debug: boolean;
@@ -31,22 +28,15 @@ export async function init(options: {
   if (options.mockForMacOS) {
     let firstThemeSent = false;
     mockTelegramEnv({
-      onEvent(event: [string, unknown], next: () => void): void {
+      onEvent(event: { name: string; params: unknown }, next: () => void): void {
         if (
-          event[0] === "web_app_request_theme" &&
-          typeof event[0] === "string"
+          event.name === "web_app_request_theme" &&
+          typeof event.params === "object"
         ) {
-          let tp: ThemeParams = {};
-          if (firstThemeSent) {
-            tp = themeParamsState();
-          } else {
-            firstThemeSent = true;
-            tp ||= retrieveLaunchParams().tgWebAppThemeParams;
-          }
-          return emitEvent("theme_changed", { theme_params: tp });
+          return emitEvent("theme_changed", { theme_params: event.params as ThemeParams });
         }
 
-        if (event[0] === "web_app_request_safe_area") {
+        if (event.name === "web_app_request_viewport") {
           return emitEvent("safe_area_changed", {
             left: 0,
             top: 0,
@@ -60,17 +50,13 @@ export async function init(options: {
     });
   }
 
-  mountBackButton.ifAvailable();
-  restoreInitData();
+  backButton.mount();
+  mainButton.mount();
+  secondaryButton.mount();
+  swipeBehavior.mount();
+  viewport.mount();
+  viewport.expand();
+  viewport.stableHeight();
 
-  if (mountMiniAppSync.isAvailable()) {
-    mountMiniAppSync();
-    bindThemeParamsCssVars();
-  }
-
-  if (mountViewport.isAvailable()) {
-    mountViewport().then(() => {
-      bindViewportCssVars();
-    });
-  }
+  swipeBehavior.disableVertical();
 }

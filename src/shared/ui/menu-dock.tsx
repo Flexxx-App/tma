@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Home, Briefcase, Calendar, Shield, Settings } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 
 type IconComponentType = React.ElementType<{ className?: string }>;
 
@@ -54,8 +55,11 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   }, [items]);
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [previousActiveIndex, setPreviousActiveIndex] = useState(0);
   const [underlineWidth, setUnderlineWidth] = useState(0);
   const [underlineLeft, setUnderlineLeft] = useState(0);
+  const [backgroundLeft, setBackgroundLeft] = useState(0);
+  const [backgroundWidth, setBackgroundWidth] = useState(0);
 
   const textRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -73,24 +77,30 @@ export const MenuDock: React.FC<MenuDockProps> = ({
       const activeButton = itemRefs.current[activeIndex];
       const activeText = textRefs.current[activeIndex];
 
-      if (
-        activeButton &&
-        activeText &&
-        showLabels &&
-        orientation === "horizontal"
-      ) {
+      if (activeButton) {
         const buttonRect = activeButton.getBoundingClientRect();
-        const textRect = activeText.getBoundingClientRect();
         const containerRect =
           activeButton.parentElement?.getBoundingClientRect();
 
         if (containerRect) {
-          setUnderlineWidth(textRect.width);
-          setUnderlineLeft(
-            buttonRect.left -
-              containerRect.left +
-              (buttonRect.width - textRect.width) / 2
-          );
+          // Update background highlight position
+          setBackgroundWidth(buttonRect.width);
+          setBackgroundLeft(buttonRect.left - containerRect.left);
+
+          // Update underline position (only if labels are shown)
+          if (
+            activeText &&
+            showLabels &&
+            orientation === "horizontal"
+          ) {
+            const textRect = activeText.getBoundingClientRect();
+            setUnderlineWidth(textRect.width);
+            setUnderlineLeft(
+              buttonRect.left -
+                containerRect.left +
+                (buttonRect.width - textRect.width) / 2
+            );
+          }
         }
       }
     };
@@ -101,6 +111,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   }, [activeIndex, finalItems, showLabels, orientation]);
 
   const handleItemClick = (index: number, item: MenuDockItem) => {
+    setPreviousActiveIndex(activeIndex);
     setActiveIndex(index);
     if (item.href) {
       router.push(item.href);
@@ -140,26 +151,44 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   return (
     <nav
       className={cn(
-        "relative w-full inline-flex items-center bg-card/20 backdrop-blur-sm border shadow-sm",
+        "relative w-full mx-16! rounded-full inline-flex items-center bg-card/20 backdrop-blur-sm border shadow-sm",
         orientation === "horizontal" ? "flex-row" : "flex-col",
         styles.container,
         className
       )}
       role="navigation"
     >
+      {/* Animated background highlight */}
+      <motion.div
+        className="absolute inset-y-0 bg-muted/50 rounded-full"
+        initial={false}
+        animate={{
+          width: `${backgroundWidth}px`,
+          left: `${backgroundLeft}px`,
+          opacity: backgroundWidth > 0 ? 1 : 0,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 30,
+          mass: 0.6,
+        }}
+        style={{ zIndex: 0 }}
+      />
+      
       {finalItems.map((item, index) => {
         const isActive = index === activeIndex;
         const IconComponent = item.icon;
 
         return (
-          <button
+          <motion.button
             key={`${item.label}-${index}`}
             ref={(el) => {
               itemRefs.current[index] = el;
             }}
             className={cn(
-              "relative flex w-full flex-col items-center justify-center rounded-lg transition-all duration-200",
-              "hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "relative flex w-full flex-col items-center justify-center rounded-lg z-10",
+              "hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               styles.item,
               isActive && "text-primary",
               !isActive && "text-muted-foreground hover:text-foreground"
@@ -167,47 +196,104 @@ export const MenuDock: React.FC<MenuDockProps> = ({
             onClick={() => handleItemClick(index, item)}
             aria-label={item.label}
             type="button"
+            initial={false}
+            animate={{
+              scale: isActive ? 1.05 : 1,
+              y: isActive ? -2 : 0,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 25,
+              mass: 0.8,
+            }}
+            whileHover={{
+              scale: 1.08,
+              y: -3,
+            }}
+            whileTap={{
+              scale: 0.95,
+            }}
           >
-            <div
+            <motion.div
+              key={`icon-${index}-${activeIndex}`}
               className={cn(
-                "flex items-center w-fulljustify-center transition-all duration-200",
-                animated && isActive && "animate-bounce",
+                "flex items-center w-full justify-center",
                 orientation === "horizontal" && showLabels ? "mb-1" : "",
                 orientation === "vertical" && showLabels ? "mb-1" : ""
               )}
+              initial={false}
+              animate={{
+                scale: isActive ? 1.15 : 1,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 500,
+                damping: 30,
+              }}
             >
-              <IconComponent
-                className={cn(styles.icon, "transition-colors duration-200 ")}
-              />
-            </div>
+              <motion.div
+                key={`rotate-${index}-${activeIndex}`}
+                animate={{
+                  rotate: isActive && animated && previousActiveIndex !== activeIndex ? [0, -12, 12, -8, 0] : 0,
+                }}
+                transition={{
+                  rotate: {
+                    duration: 0.6,
+                    ease: [0.34, 1.56, 0.64, 1],
+                    times: [0, 0.25, 0.5, 0.75, 1],
+                  },
+                }}
+              >
+                <IconComponent
+                  className={cn(styles.icon, "transition-colors duration-200")}
+                />
+              </motion.div>
+            </motion.div>
 
             {showLabels && (
-              <span
+              <motion.span
                 ref={(el) => {
                   textRefs.current[index] = el;
                 }}
                 className={cn(
-                  "font-medium transition-colors duration-200 capitalize",
+                  "font-medium capitalize",
                   styles.text,
                   "whitespace-nowrap"
                 )}
+                initial={false}
+                animate={{
+                  opacity: isActive ? 1 : 0.6,
+                  y: isActive ? 0 : 2,
+                  scale: isActive ? 1.05 : 1,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 25,
+                }}
               >
                 {item.label}
-              </span>
+              </motion.span>
             )}
-          </button>
+          </motion.button>
         );
       })}
 
       {showLabels && orientation === "horizontal" && (
-        <div
-          className={cn(
-            "absolute bottom-2 h-0.5 w-full bg-primary rounded-full transition-all duration-300 ease-out",
-            animated ? "transition-all duration-300" : ""
-          )}
-          style={{
+        <motion.div
+          className="absolute bottom-2 h-0.5 bg-primary rounded-full"
+          initial={false}
+          animate={{
             width: `${underlineWidth}px`,
             left: `${underlineLeft}px`,
+            opacity: underlineWidth > 0 ? 1 : 0,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+            mass: 0.5,
           }}
         />
       )}

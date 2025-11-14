@@ -23,7 +23,7 @@ export const EditProfileForm = ({ className }: IProps) => {
         className
       )}
     >
-      <Avatar className="size-32">
+      <Avatar className="size-24">
         <AvatarImage src="https://github.com/shadcn.png" />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>

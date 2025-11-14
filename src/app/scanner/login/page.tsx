@@ -1,5 +1,8 @@
-import { ScannerLoginPage } from "@/pages/(scanner)/login-page";
+"use client";
+import { ScannerLoginPage as ScannerLoginPageComponent } from "@/pages/(scanner)/login-page";
+import { useBackButton } from "@/shared/tma/useBackButton";
 
-export default async function ScannerPage() {
-  return <ScannerLoginPage />;
+export default function ScannerLoginPage() {
+  useBackButton();
+  return <ScannerLoginPageComponent />;
 }

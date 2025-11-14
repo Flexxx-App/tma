@@ -1,10 +1,13 @@
+"use client";
 import { GuestInfoPage as GuestInfoPageComponent } from "@/pages/(scanner)/guest-info/ui/guest-info-page";
+import { useBackButton } from "@/shared/tma/useBackButton";
 
-export default async function GuestInfoPage({
+export function GuestInfoPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
+  useBackButton()
   return <GuestInfoPageComponent id={id} />;
 }

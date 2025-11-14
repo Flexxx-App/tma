@@ -49,7 +49,7 @@ const mockOrder: IOrder = {
 export const OrderPage = ({ id }: { id: string }) => {
   console.log(id);
   return (
-    <Page className="flex flex-col gap-7 p-4">
+    <Page className="flex flex-col gap-7 p-4 mb-20">
       <OrderPageHeader
         id={mockOrder.id}
         status={mockOrder.status}

@@ -65,7 +65,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
       data: "{}", // initial placeholder, will be updated below
       width: 200,
       height: 200,
-      margin: 0,
+      margin: 2,
       image: AppLogo.src,
       imageOptions: { hideBackgroundDots: true, imageSize: 0.4, margin: 10 },
       cornersSquareOptions: { type: "extra-rounded" },

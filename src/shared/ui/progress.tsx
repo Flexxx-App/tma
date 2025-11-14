@@ -17,6 +17,7 @@ function Progress({
   const percent = (clampedValue / safeMax) * 100;
   return (
     <ProgressPrimitive.Root
+      suppressHydrationWarning
       data-slot="progress"
       className={cn(
         "bg-primary/20 relative h-2 overflow-hidden rounded-full w-full",
@@ -25,6 +26,7 @@ function Progress({
       {...props}
     >
       <ProgressPrimitive.Indicator
+        suppressHydrationWarning
         data-slot="progress-indicator"
         className={cn("bg-primary h-full flex-1 transition-all")}
         style={{ transform: `translateX(-${100 - percent}%)` }}
