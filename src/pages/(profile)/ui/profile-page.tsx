@@ -13,15 +13,23 @@ import {
 } from "@/shared/ui";
 import { ScanFace } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useGetMeQuery } from "@/entities/user/model/api";
+import { IUser } from "@/entities/user/model/types";
+
+const getFullName = (user?: IUser) => {
+  if (!user) return "";
+  return `${user.first_name ?? ""} ${user.last_name ?? ""}`;
+};
 
 export const ProfilePage = () => {
   const router = useRouter();
+  const { data: user } = useGetMeQuery();
   return (
     <Page className="flex flex-col">
       <UserInfoWidget
-        name="John Doe"
-        username="john.doe"
-        avatar="https://github.com/shadcn.png"
+        name={getFullName(user)}
+        username={user?.username}
+        avatar={user?.avatar_url ?? undefined}
         className="pt-10"
       />
       <div className="px-4 mb-4">

@@ -30,23 +30,6 @@ class ApiInstance {
       },
       withCredentials: true,
     });
-
-    // Add request interceptor to dynamically set authorization header
-    this.axios.interceptors.request.use(
-      (config) => {
-        // Only access localStorage in browser environment
-        if (typeof window !== "undefined") {
-          const sid = localStorage.getItem("sid");
-          if (sid) {
-            config.headers.Authorization = `TMA ${sid}`;
-          }
-        }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      },
-    );
   }
 
   async get<T>(endpoint: string, options: AxiosRequestConfig = {}): Promise<T> {

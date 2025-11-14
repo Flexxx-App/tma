@@ -4,6 +4,22 @@ import { useEffect } from "react";
 import { useTmaAuthMutation } from "@/entities/auth/model/api";
 import { retrieveRawInitData } from "@tma.js/sdk";
 
+function setCookie(
+  name: string,
+  value: string,
+  options: { path?: string; sameSite?: string } = {},
+) {
+  let cookieStr = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+  if (options.path) {
+    cookieStr += `; path=${options.path}`;
+  }
+  if (options.sameSite) {
+    cookieStr += `; SameSite=${options.sameSite}`;
+  }
+  // This works on the client; on the server, you need headers
+  window?.document && (window.document.cookie = cookieStr);
+}
+
 export const AuthInitializer = ({
   children,
 }: {
@@ -22,10 +38,14 @@ export const AuthInitializer = ({
           .unwrap()
           .then((response) => {
             if (response.message === "ok") {
-              localStorage.setItem("sid", response.data.sid);
-            } else {
-              throw new Error(response.message);
+              setCookie("sid", response.data.sid, {
+                path: "/",
+                sameSite: "Lax",
+              });
             }
+          })
+          .catch((error) => {
+            console.error("Failed to initialize auth:", error);
           });
       } catch (error) {
         console.error("Failed to initialize auth:", error);

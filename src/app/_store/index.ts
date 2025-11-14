@@ -7,15 +7,20 @@ import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import { combineReducers } from "@reduxjs/toolkit";
 import { authApiSlice } from "@/entities/auth/model/api";
+import { userApiSlice } from "@/entities/user/model/api";
 
 const rootReducer = combineReducers({
   [authApiSlice.reducerPath]: authApiSlice.reducer,
+  [userApiSlice.reducerPath]: userApiSlice.reducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApiSlice.middleware),
+    getDefaultMiddleware().concat(
+      authApiSlice.middleware,
+      userApiSlice.middleware,
+    ),
 });
 
 export type AppStore = typeof store;
