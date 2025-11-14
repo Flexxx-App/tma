@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import { TicketsPage as TicketsPageComponent } from "@/pages/(tickets)/ui/tickets-page";
 import { useBackButton } from "@/shared/tma/useBackButton";

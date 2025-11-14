@@ -32,7 +32,7 @@ export function useMainButton(options: UseMainButtonOptions) {
     if (options.isEnabled) {
       mainButton.enable();
     }
-    if (options.isVisible) {
+    if (isVisible) {
       mainButton.show();
     }
     mainButton.onClick(options.onClick ?? (() => {}));

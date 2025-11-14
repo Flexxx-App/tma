@@ -30,7 +30,7 @@ export function useSecondaryButton(options: UseSecondaryButtonOptions) {
     if (options.isEnabled) {
       secondaryButton.enable();
     }
-    if (options.isVisible) {
+    if (isVisible) {
       secondaryButton.show();
     }
     secondaryButton.setPosition(position);
