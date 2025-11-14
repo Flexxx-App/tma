@@ -22,6 +22,7 @@ export interface MenuDockProps {
   orientation?: "horizontal" | "vertical";
   showLabels?: boolean;
   animated?: boolean;
+  activeIndex?: number;
 }
 
 const defaultItems: MenuDockItem[] = [
@@ -39,6 +40,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   orientation = "horizontal",
   showLabels = true,
   animated = true,
+  activeIndex: controlledActiveIndex,
 }) => {
   const router = useRouter();
   const finalItems = useMemo(() => {
@@ -54,8 +56,10 @@ export const MenuDock: React.FC<MenuDockProps> = ({
     return items;
   }, [items]);
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [internalActiveIndex, setInternalActiveIndex] = useState(0);
+  const activeIndex = controlledActiveIndex ?? internalActiveIndex;
   const [previousActiveIndex, setPreviousActiveIndex] = useState(0);
+  const previousActiveIndexRef = useRef(activeIndex);
   const [underlineWidth, setUnderlineWidth] = useState(0);
   const [underlineLeft, setUnderlineLeft] = useState(0);
   const [backgroundLeft, setBackgroundLeft] = useState(0);
@@ -67,10 +71,19 @@ export const MenuDock: React.FC<MenuDockProps> = ({
   useEffect(() => {
     if (activeIndex >= finalItems.length) {
       setTimeout(() => {
-        setActiveIndex(0);
+        if (controlledActiveIndex === undefined) {
+          setInternalActiveIndex(0);
+        }
       }, 0);
     }
-  }, [finalItems, activeIndex]);
+  }, [finalItems, activeIndex, controlledActiveIndex]);
+
+  useEffect(() => {
+    if (previousActiveIndexRef.current !== activeIndex) {
+      setPreviousActiveIndex(previousActiveIndexRef.current);
+      previousActiveIndexRef.current = activeIndex;
+    }
+  }, [activeIndex]);
 
   useEffect(() => {
     const updateUnderline = () => {
@@ -112,7 +125,9 @@ export const MenuDock: React.FC<MenuDockProps> = ({
 
   const handleItemClick = (index: number, item: MenuDockItem) => {
     setPreviousActiveIndex(activeIndex);
-    setActiveIndex(index);
+    if (controlledActiveIndex === undefined) {
+      setInternalActiveIndex(index);
+    }
     if (item.href) {
       router.push(item.href);
     } else {

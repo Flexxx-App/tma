@@ -30,6 +30,8 @@ export function Dock({ className }: IProps) {
     return null;
   }
 
+  const activeIndex = menuItems.findIndex((item) => item.href === pathname);
+
   return (
     <div className={cn("flex justify-center min-h-[54px] mb-4", className)}>
       <MenuDock
@@ -38,6 +40,7 @@ export function Dock({ className }: IProps) {
         variant="compact"
         animated={false}
         showLabels={false}
+        activeIndex={activeIndex >= 0 ? activeIndex : 0}
       />
     </div>
   );
