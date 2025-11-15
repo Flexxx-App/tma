@@ -49,7 +49,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
     if (!isValid) {
       console.warn(
         "MenuDock: 'items' prop is invalid or missing. Using default items.",
-        items
+        items,
       );
       return defaultItems;
     }
@@ -101,17 +101,13 @@ export const MenuDock: React.FC<MenuDockProps> = ({
           setBackgroundLeft(buttonRect.left - containerRect.left);
 
           // Update underline position (only if labels are shown)
-          if (
-            activeText &&
-            showLabels &&
-            orientation === "horizontal"
-          ) {
+          if (activeText && showLabels && orientation === "horizontal") {
             const textRect = activeText.getBoundingClientRect();
             setUnderlineWidth(textRect.width);
             setUnderlineLeft(
               buttonRect.left -
                 containerRect.left +
-                (buttonRect.width - textRect.width) / 2
+                (buttonRect.width - textRect.width) / 2,
             );
           }
         }
@@ -169,11 +165,10 @@ export const MenuDock: React.FC<MenuDockProps> = ({
         "relative w-full mx-16! rounded-full inline-flex items-center bg-card/20 backdrop-blur-sm border shadow-sm",
         orientation === "horizontal" ? "flex-row" : "flex-col",
         styles.container,
-        className
+        className,
       )}
       role="navigation"
     >
-      {/* Animated background highlight */}
       <motion.div
         className="absolute inset-y-0 bg-muted/50 rounded-full"
         initial={false}
@@ -190,7 +185,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
         }}
         style={{ zIndex: 0 }}
       />
-      
+
       {finalItems.map((item, index) => {
         const isActive = index === activeIndex;
         const IconComponent = item.icon;
@@ -206,7 +201,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
               "hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               styles.item,
               isActive && "text-primary",
-              !isActive && "text-muted-foreground hover:text-foreground"
+              !isActive && "text-muted-foreground hover:text-foreground",
             )}
             onClick={() => handleItemClick(index, item)}
             aria-label={item.label}
@@ -235,7 +230,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
               className={cn(
                 "flex items-center w-full justify-center",
                 orientation === "horizontal" && showLabels ? "mb-1" : "",
-                orientation === "vertical" && showLabels ? "mb-1" : ""
+                orientation === "vertical" && showLabels ? "mb-1" : "",
               )}
               initial={false}
               animate={{
@@ -250,7 +245,10 @@ export const MenuDock: React.FC<MenuDockProps> = ({
               <motion.div
                 key={`rotate-${index}-${activeIndex}`}
                 animate={{
-                  rotate: isActive && animated && previousActiveIndex !== activeIndex ? [0, -12, 12, -8, 0] : 0,
+                  rotate:
+                    isActive && animated && previousActiveIndex !== activeIndex
+                      ? [0, -12, 12, -8, 0]
+                      : 0,
                 }}
                 transition={{
                   rotate: {
@@ -274,7 +272,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
                 className={cn(
                   "font-medium capitalize",
                   styles.text,
-                  "whitespace-nowrap"
+                  "whitespace-nowrap",
                 )}
                 initial={false}
                 animate={{
