@@ -112,7 +112,6 @@ export const EditProfileForm = ({ className }: IProps) => {
           </FieldContent>
         </Field>
       </FieldGroup>
-      <SocialsForm />
     </div>
   );
 };

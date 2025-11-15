@@ -8,11 +8,13 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { authApiSlice } from "@/entities/auth/model/api";
 import { userApiSlice } from "@/entities/user/model/api";
 import { eventApiSlice } from "@/entities/event/model/api";
+import { orderApiSlice } from "@/entities/order/model/api";
 
 const rootReducer = combineReducers({
   [authApiSlice.reducerPath]: authApiSlice.reducer,
   [userApiSlice.reducerPath]: userApiSlice.reducer,
   [eventApiSlice.reducerPath]: eventApiSlice.reducer,
+  [orderApiSlice.reducerPath]: orderApiSlice.reducer,
 });
 
 export const makeStore = () =>
@@ -23,6 +25,7 @@ export const makeStore = () =>
         authApiSlice.middleware,
         userApiSlice.middleware,
         eventApiSlice.middleware,
+        orderApiSlice.middleware,
       ),
   });
 

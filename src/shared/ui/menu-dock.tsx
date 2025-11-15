@@ -198,7 +198,7 @@ export const MenuDock: React.FC<MenuDockProps> = ({
             }}
             className={cn(
               "relative flex w-full flex-col items-center justify-center rounded-lg z-10",
-              "hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               styles.item,
               isActive && "text-primary",
               !isActive && "text-muted-foreground hover:text-foreground",
