@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { mainButton, RGB } from "@tma.js/sdk";
 
 interface UseMainButtonOptions {
@@ -15,30 +15,90 @@ interface UseMainButtonOptions {
 
 export function useMainButton(options: UseMainButtonOptions) {
   const isVisible = options.isVisible ?? true;
+  const prevOptionsRef = useRef<
+    Partial<UseMainButtonOptions> & { isVisible?: boolean }
+  >({});
+  const offClickRef = useRef<VoidFunction | null>(null);
+
   useEffect(() => {
-    mainButton.setText(options.text);
-    if (options.isLoaderVisible) {
-      mainButton.showLoader();
+    const prev = prevOptionsRef.current;
+
+    if (prev.text !== options.text) {
+      mainButton.setText(options.text);
     }
-    if (options.isShineEffectEnabled) {
+
+    if (prev.isLoaderVisible !== options.isLoaderVisible) {
+      if (options.isLoaderVisible) {
+        mainButton.showLoader();
+      } else {
+        mainButton.hideLoader();
+      }
+    }
+
+    if (
+      prev.isShineEffectEnabled !== options.isShineEffectEnabled &&
+      options.isShineEffectEnabled
+    ) {
       mainButton.enableShineEffect();
     }
-    if (options.bgColor) {
+
+    if (prev.bgColor !== options.bgColor && options.bgColor) {
       mainButton.setBgColor(options.bgColor);
     }
-    if (options.textColor) {
+    if (prev.textColor !== options.textColor && options.textColor) {
       mainButton.setTextColor(options.textColor);
     }
-    if (options.isEnabled) {
-      mainButton.enable();
-    }
-    if (isVisible) {
-      mainButton.show();
-    }
-    mainButton.onClick(options.onClick ?? (() => {}));
 
+    if (
+      prev.isEnabled !== options.isEnabled &&
+      options.isEnabled !== undefined
+    ) {
+      if (options.isEnabled) {
+        mainButton.enable();
+      } else {
+        mainButton.disable();
+      }
+    }
+
+    if (prev.isVisible !== isVisible) {
+      if (isVisible) {
+        mainButton.show();
+      } else {
+        mainButton.hide();
+      }
+    }
+
+    if (prev.onClick !== options.onClick) {
+      if (offClickRef.current) {
+        offClickRef.current();
+        offClickRef.current = null;
+      }
+
+      if (options.onClick) {
+        offClickRef.current = mainButton.onClick(() => {
+          options.onClick?.();
+        });
+      }
+    }
+
+    prevOptionsRef.current = { ...options, isVisible };
+  }, [
+    options.text,
+    options.isLoaderVisible,
+    options.isShineEffectEnabled,
+    options.bgColor,
+    options.textColor,
+    options.isEnabled,
+    options.onClick,
+    isVisible,
+  ]);
+
+  useEffect(() => {
     return () => {
+      if (offClickRef.current) {
+        offClickRef.current();
+      }
       mainButton.hide();
     };
-  }, [options.text, options.onClick, options.bgColor, options.textColor]);
+  }, []);
 }

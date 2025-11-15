@@ -27,7 +27,7 @@ export const UserInfoWidget = ({
         <AvatarImage src={avatar} />
         <AvatarFallback>{name.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
-      <div className="flex flex-col">
+      <div className="flex flex-col items-center">
         <Text className="text-lg">{name}</Text>
         <Text className="text-sm text-muted-foreground">
           {username && `@${username}`}

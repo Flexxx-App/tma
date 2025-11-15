@@ -18,7 +18,7 @@ export const axiosBaseQuery =
   > =>
   async <T>(
     args: AxiosBaseQueryArgs,
-    api: any
+    api: any,
   ): Promise<{ data: T } | { error: { status: string; data: string } }> => {
     const { url, method = "get", data, params, headers } = args;
 

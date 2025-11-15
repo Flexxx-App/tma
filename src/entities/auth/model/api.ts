@@ -4,12 +4,7 @@ import { ITmaAuthResponse } from "@/entities/auth/model/types";
 
 export const authApiSlice = createApi({
   reducerPath: "authApi",
-  baseQuery: axiosBaseQuery({
-    baseUrl:
-      typeof window !== "undefined"
-        ? "/auth"
-        : `${process.env.NEXT_PUBLIC_API_URL}/auth`,
-  }),
+  baseQuery: axiosBaseQuery({ baseUrl: "/auth" }),
   tagTypes: ["Auth"],
   endpoints: (builder) => ({
     tmaAuth: builder.mutation<

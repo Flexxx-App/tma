@@ -1,14 +1,11 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/shared/api/app";
-import { IUser } from "@/entities/user/model/types";
+import { IUser, IUserUpdate } from "@/entities/user/model/types";
 
 export const userApiSlice = createApi({
   reducerPath: "userApi",
   baseQuery: axiosBaseQuery({
-    baseUrl:
-      typeof window !== "undefined"
-        ? "/users"
-        : `${process.env.NEXT_PUBLIC_API_URL}/users`,
+    baseUrl: "/users",
   }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
@@ -19,7 +16,15 @@ export const userApiSlice = createApi({
       }),
       providesTags: ["User"],
     }),
+    updateMe: builder.mutation<IUser, IUserUpdate, { tagTypes: string[] }>({
+      query: (data) => ({
+        url: `/`,
+        method: "PUT",
+        data,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useGetMeQuery } = userApiSlice;
+export const { useGetMeQuery, useUpdateMeMutation } = userApiSlice;

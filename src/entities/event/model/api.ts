@@ -16,12 +16,7 @@ interface IEventsQueryArg {
 
 export const eventApiSlice = createApi({
   reducerPath: "eventApi",
-  baseQuery: axiosBaseQuery({
-    baseUrl:
-      typeof window !== "undefined"
-        ? "/events"
-        : `${process.env.NEXT_PUBLIC_API_URL}/events`,
-  }),
+  baseQuery: axiosBaseQuery(),
   tagTypes: ["Event"],
   endpoints: (builder) => ({
     getEvent: builder.query<IEvent, string, undefined>({

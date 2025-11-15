@@ -4,11 +4,7 @@ import axios, {
   type AxiosResponse,
 } from "axios";
 
-// Use /api proxy in browser to avoid CORS, fallback to direct URL if needed
-export const API_URL =
-  typeof window !== "undefined"
-    ? "/api"
-    : process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+export const API_URL = "/api/proxy";
 
 export type AxiosBaseQueryArgs = {
   url: string;
@@ -27,6 +23,11 @@ class ApiInstance {
       timeout: 120000,
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Methods":
+          "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers":
+          "Content-Type,Cookie,Authorization,X-TMA",
+        "Access-Control-Max-Age": "86400",
       },
       withCredentials: true,
     });

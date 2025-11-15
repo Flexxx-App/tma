@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Dock } from "@/widgets/Dock";
 import { Providers } from "./providers";
+import { Toaster } from "@/shared/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
         />
         <Providers>{children}</Providers>
         <Dock className="fixed bottom-0 left-0 right-0 z-50" />
+        <Toaster position="top-center" />
       </body>
     </html>
   );

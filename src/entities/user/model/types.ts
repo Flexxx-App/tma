@@ -14,3 +14,11 @@ export interface IUser {
   gender: UserGenderEnum;
   avatar_url?: string | null;
 }
+
+export interface IUserUpdate {
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  gender?: UserGenderEnum;
+  avatar_url?: string | null;
+}
