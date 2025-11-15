@@ -20,3 +20,4 @@ export * from "./input-group";
 export * from "./empty";
 export * from "./tabs";
 export * from "./motion-highlight";
+export * from "./infinite-scroll";

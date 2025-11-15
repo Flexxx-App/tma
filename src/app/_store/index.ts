@@ -8,10 +8,12 @@ import type { TypedUseSelectorHook } from "react-redux";
 import { combineReducers } from "@reduxjs/toolkit";
 import { authApiSlice } from "@/entities/auth/model/api";
 import { userApiSlice } from "@/entities/user/model/api";
+import { eventApiSlice } from "@/entities/event/model/api";
 
 const rootReducer = combineReducers({
   [authApiSlice.reducerPath]: authApiSlice.reducer,
   [userApiSlice.reducerPath]: userApiSlice.reducer,
+  [eventApiSlice.reducerPath]: eventApiSlice.reducer,
 });
 
 export const store = configureStore({
@@ -20,6 +22,7 @@ export const store = configureStore({
     getDefaultMiddleware().concat(
       authApiSlice.middleware,
       userApiSlice.middleware,
+      eventApiSlice.middleware,
     ),
 });
 
