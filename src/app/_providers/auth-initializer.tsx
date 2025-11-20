@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { useTmaAuthMutation } from "@/entities/auth/model/api";
-import { retrieveRawInitData } from "@tma.js/sdk";
+import { retrieveLaunchParams, retrieveRawInitData } from "@tma.js/sdk";
+import { useRouter } from "next/navigation";
 
 function setCookie(
   name: string,

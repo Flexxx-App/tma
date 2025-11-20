@@ -1,4 +1,5 @@
 export * from "./button";
+export * from "./choicebox";
 export * from "./menu-dock";
 export * from "./layout";
 export * from "./page";
@@ -23,3 +24,8 @@ export * from "./motion-highlight";
 export * from "./infinite-scroll";
 export * from "./skeleton";
 export * from "./sonner";
+export * from "./slider";
+export * from "./dropzone";
+export * from "./spinner";
+export * from "./stepper";
+export * from "./map";

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect } from "react";
 import { secondaryButton, RGB } from "@tma.js/sdk";
@@ -33,11 +33,27 @@ export function useSecondaryButton(options: UseSecondaryButtonOptions) {
     if (isVisible) {
       secondaryButton.show();
     }
+    if (options.bgColor) {
+      secondaryButton.setBgColor(options.bgColor);
+    }
+    if (options.textColor) {
+      secondaryButton.setTextColor(options.textColor);
+    }
     secondaryButton.setPosition(position);
     secondaryButton.onClick(options.onClick ?? (() => {}));
 
     return () => {
       secondaryButton.hide();
     };
-  }, [options.text, options.onClick, options.bgColor, options.textColor]);
+  }, [
+    options.text,
+    options.onClick,
+    options.bgColor,
+    options.textColor,
+    options.isEnabled,
+    options.isLoaderVisible,
+    options.isShineEffectEnabled,
+    isVisible,
+    position,
+  ]);
 }
