@@ -15,6 +15,7 @@ import {
 } from "@/shared/ui/tabs";
 import { useGetEventsInfiniteQuery } from "@/entities/event/model/api";
 import type { IEvent } from "@/entities/event/model/types";
+import { hapticFeedback } from "@tma.js/sdk";
 
 interface IProps {
   className?: string;
@@ -85,7 +86,12 @@ export const EventTicketsPage: React.FC<IProps> = ({ className, ...props }) => {
         defaultValue="upcoming"
         className="w-full rounded-lg justify-center items-center"
       >
-        <TabsList className="grid w-fit grid-cols-2 justify-center items-center mt-4">
+        <TabsList
+          className="grid w-fit grid-cols-2 justify-center items-center mt-4"
+          onClick={() => {
+            hapticFeedback.impactOccurred("light");
+          }}
+        >
           <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
           <TabsTrigger value="past">Past</TabsTrigger>
         </TabsList>

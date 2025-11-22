@@ -11,6 +11,7 @@ import { eventApiSlice } from "@/entities/event/model/api";
 import { orderApiSlice } from "@/entities/order/model/api";
 import { photoApiSlice } from "@/entities/photo/model/api";
 import { googlePlacesApiSlice } from "@/entities/googleMap/model/api";
+import { scannerApiSlice } from "@/entities/scanner/model/api";
 
 const rootReducer = combineReducers({
   [authApiSlice.reducerPath]: authApiSlice.reducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   [orderApiSlice.reducerPath]: orderApiSlice.reducer,
   [photoApiSlice.reducerPath]: photoApiSlice.reducer,
   [googlePlacesApiSlice.reducerPath]: googlePlacesApiSlice.reducer,
+  [scannerApiSlice.reducerPath]: scannerApiSlice.reducer,
 });
 
 export const makeStore = () =>
@@ -32,6 +34,7 @@ export const makeStore = () =>
         orderApiSlice.middleware,
         photoApiSlice.middleware,
         googlePlacesApiSlice.middleware,
+        scannerApiSlice.middleware,
       ),
   });
 

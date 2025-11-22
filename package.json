@@ -22,6 +22,7 @@
     "@telegram-apps/sdk-react": "^3.3.9",
     "@tma.js/sdk": "^3.0.8",
     "@tma.js/sdk-react": "^3.0.8",
+    "@vkruglikov/react-telegram-web-app": "^2.1.9",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

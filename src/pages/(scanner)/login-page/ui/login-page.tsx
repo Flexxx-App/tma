@@ -1,20 +1,41 @@
 "use client";
+
 import { Page, Text } from "@/shared/ui";
 import { LoginForm } from "./form";
 import { ShieldCheck } from "lucide-react";
-import { useMainButton } from "@/shared/tma/useMainButton";
+import { FormProvider } from "react-hook-form";
+import { useAuthScannerMutation } from "@/entities/scanner/model/api";
+import { IAuthScanner } from "@/entities/scanner/model/types";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { MainButton } from "@vkruglikov/react-telegram-web-app";
+import { useRouter } from "next/navigation";
 
 export const ScannerLoginPage = () => {
-  useMainButton({
-    text: "Login",
-    isVisible: true,
-    isEnabled: true,
-    isLoaderVisible: false,
-    isShineEffectEnabled: false,
-    onClick: () => {
-      console.log("Login");
+  const [authScanner, { isLoading }] = useAuthScannerMutation();
+  const router = useRouter();
+  const form = useForm<IAuthScanner>({
+    mode: "onChange",
+    defaultValues: {
+      password: "",
     },
   });
+
+  const onSubmit = async (data: IAuthScanner) => {
+    console.log("AUTH SCANNER");
+    const res = await authScanner(data)
+      .then((res) => {
+        router.push("/scanner");
+      })
+      .catch((e) => {
+        console.error(e);
+        router.push("/scanner");
+        toast.error("Invalid password");
+      });
+    console.log(res);
+  };
+
+  const handleMainButtonClick = async () => await onSubmit(form.getValues());
 
   return (
     <Page className="flex justify-center p-4">
@@ -29,9 +50,16 @@ export const ScannerLoginPage = () => {
           </Text>
         </div>
         <div className="mt-6">
-          <LoginForm />
+          <FormProvider {...form}>
+            <LoginForm />
+          </FormProvider>
         </div>
       </div>
+      <MainButton
+        text="Login"
+        onClick={handleMainButtonClick}
+        progress={isLoading}
+      />
     </Page>
   );
 };

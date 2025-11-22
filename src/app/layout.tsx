@@ -40,7 +40,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full min-h-screen w-full`}
       >
         <Script
-          src="https://telegram.org/js/telegram-web-app.js"
+          src="https://telegram.org/js/telegram-web-app.js?59"
           strategy="beforeInteractive"
         />
         <Providers>{children}</Providers>

@@ -7,6 +7,8 @@ import {
 import { SearchIcon } from "lucide-react";
 import { IGuest } from "@/entities/guest/model/types";
 import { GuestList } from "./guest-list";
+import { Text } from "@/shared/ui";
+import { MainButton } from "@vkruglikov/react-telegram-web-app";
 
 const guests: IGuest[] = [
   {
@@ -32,6 +34,7 @@ const guests: IGuest[] = [
 export const GuestsPage = () => {
   return (
     <Page className="p-4 space-y-4 flex flex-col">
+      <Text className="text-2xl font-bold mb-4!">Guests</Text>
       <InputGroup>
         <InputGroupInput placeholder="Search by email, name..." />
         <InputGroupAddon align="inline-start">
@@ -39,6 +42,7 @@ export const GuestsPage = () => {
         </InputGroupAddon>
       </InputGroup>
       <GuestList guests={guests} />
+      <MainButton text="Invite" />
     </Page>
   );
 };
