@@ -63,15 +63,6 @@ export const ProfilePage = () => {
       >
         <PencilIcon className="size-4" />
       </Button>
-      <Button
-        className="absolute p-2! h-8 left-4 top-4 rounded-full! border-none text-md text-muted-foreground hover:bg-transparent hover:text-foreground"
-        variant="outline"
-        onClick={() => {
-          router.push("/scanner/login");
-        }}
-      >
-        <ScanLine className="size-4" />
-      </Button>
     </Page>
   );
 };

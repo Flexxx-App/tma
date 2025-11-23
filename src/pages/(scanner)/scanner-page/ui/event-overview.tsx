@@ -15,7 +15,7 @@ export const EventOverview = () => {
             className="size-12 object-cover rounded-md aspect-square"
           />
           <div className="flex flex-col">
-            <Text>Event Name</Text>
+            <Text className="font-semibold">Event Name</Text>
             <Text className="text-sm text-muted-foreground">2025-12-12</Text>
           </div>
         </CardContent>

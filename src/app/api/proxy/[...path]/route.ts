@@ -121,7 +121,7 @@ async function handleRequest(
       jsonData = data;
     }
 
-    return NextResponse.json(jsonData, {
+    const nextResponse = NextResponse.json(jsonData, {
       status: response.status,
       headers: {
         "Access-Control-Allow-Methods":
@@ -130,6 +130,13 @@ async function handleRequest(
           "Content-Type,Cookie,Authorization,X-TMA",
       },
     });
+
+    const setCookie = response.headers.get("set-cookie");
+    if (setCookie) {
+      nextResponse.headers.set("set-cookie", setCookie);
+    }
+
+    return nextResponse;
   } catch (error) {
     console.error("Proxy error:", error);
     return NextResponse.json(

@@ -31,7 +31,6 @@ export default function StatisticCard6() {
 
           {/* Guests summary */}
           <div className="space-y-6">
-            {/* Guest list */}
             <div className="grid grid-cols-3 gap-2.5">
               <div className="flex flex-col items-center justify-center bg-muted/60 rounded-lg py-3.5 px-2 gap-1">
                 <span className="text-lg font-bold text-green-500">28</span>
@@ -43,7 +42,7 @@ export default function StatisticCard6() {
               </div>
               <div className="flex flex-col items-center justify-center bg-muted/60 rounded-lg py-3.5 px-2 gap-1">
                 <span className="text-lg font-bold text-violet-500">8</span>
-                <span className="text-xs text-accent-foreground">Outside</span>
+                <span className="text-xs text-accent-foreground">Incoming</span>
               </div>
             </div>
           </div>
