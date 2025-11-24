@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useTmaAuthMutation } from "@/entities/auth/model/api";
-import { retrieveLaunchParams, retrieveRawInitData } from "@tma.js/sdk";
-import { useRouter } from "next/navigation";
+import { retrieveRawInitData } from "@tma.js/sdk";
 
 function setCookie(
   name: string,
@@ -17,7 +16,6 @@ function setCookie(
   if (options.sameSite) {
     cookieStr += `; SameSite=${options.sameSite}`;
   }
-  // This works on the client; on the server, you need headers
   window?.document && (window.document.cookie = cookieStr);
 }
 

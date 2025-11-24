@@ -5,34 +5,14 @@ import {
   Page,
 } from "@/shared/ui";
 import { SearchIcon } from "lucide-react";
-import { IGuest } from "@/entities/guest/model/types";
 import { GuestList } from "./guest-list";
 import { Text } from "@/shared/ui";
 import { MainButton } from "@vkruglikov/react-telegram-web-app";
 import { useGetGuestsInfiniteQuery } from "@/entities/guest/model/api";
-
-const guests: IGuest[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "1234567890",
-    status: "active",
-    createdAt: "2025-01-01T00:00:00.000Z",
-    avatarUrl: "https://github.com/shadcn.png",
-  },
-  {
-    id: "2",
-    name: "Jane Doe",
-    email: "jane.doe@example.com",
-    phone: "1234567890",
-    status: "active",
-    createdAt: "2025-01-01T00:00:00.000Z",
-    avatarUrl: "https://github.com/shadcn.png",
-  },
-];
+import { useRouter } from "next/navigation";
 
 export const GuestsPage = () => {
+  const router = useRouter();
   const eventId = localStorage.getItem("scanner_event_id");
   const { data: guests } = useGetGuestsInfiniteQuery({
     eventId: eventId!,
@@ -48,7 +28,10 @@ export const GuestsPage = () => {
         </InputGroupAddon>
       </InputGroup>
       <GuestList guests={guestsData} />
-      <MainButton text="Invite" />
+      <MainButton
+        text="Invite"
+        onClick={() => router.push("/scanner/guests/invite")}
+      />
     </Page>
   );
 };
