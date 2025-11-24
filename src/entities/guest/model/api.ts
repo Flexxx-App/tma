@@ -1,34 +1,25 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/shared/api/app";
-import type { IApiEventResponse } from "./types";
-import type { IEvent } from "@/entities/event/model/types";
+import { IGuestsResponse } from "@/entities/guest/model/types";
 
-interface IEventsPageParam {
+interface IGuestsPageParam {
   offset: number;
   limit: number;
 }
 
-interface IEventsQueryArg {
-  user_id: string;
-  start_date?: string | null;
-  end_date?: string | null;
+interface IGuestsQueryArg {
+  eventId: string;
 }
 
-export const eventApiSlice = createApi({
-  reducerPath: "eventApi",
-  baseQuery: axiosBaseQuery({ baseUrl: "/events" }),
-  tagTypes: ["Event"],
+export const guestApiSlice = createApi({
+  reducerPath: "guestApi",
+  baseQuery: axiosBaseQuery({ baseUrl: "/guests" }),
+  tagTypes: ["Guest"],
   endpoints: (builder) => ({
-    getEvent: builder.query<IEvent, string, undefined>({
-      query: (id) => ({ url: `/${id}`, method: "GET" }),
-    }),
-    getEventBySlug: builder.query<IApiEventResponse, string, undefined>({
-      query: (slug) => ({ url: `/slug/${slug}` }),
-    }),
-    getEvents: builder.infiniteQuery<
-      IEvent[],
-      IEventsQueryArg,
-      IEventsPageParam
+    getGuests: builder.infiniteQuery<
+      IGuestsResponse,
+      IGuestsQueryArg,
+      IGuestsPageParam
     >({
       infiniteQueryOptions: {
         initialPageParam: {
@@ -37,7 +28,7 @@ export const eventApiSlice = createApi({
         },
         getNextPageParam: (lastPage, _allPages, lastPageParam) => {
           const nextOffset = lastPageParam.offset + lastPageParam.limit;
-          const remainingItems = (lastPage?.length ?? 0) - nextOffset;
+          const remainingItems = (lastPage?.data?.length ?? 0) - nextOffset;
           if (remainingItems <= 0) {
             return undefined;
           }
@@ -57,14 +48,12 @@ export const eventApiSlice = createApi({
       },
       query: ({ queryArg, pageParam }) => {
         const { offset, limit } = pageParam;
-        const user_id = queryArg?.user_id;
+        const eventId = queryArg?.eventId;
         const url = `/`;
         const params = {
-          user_id,
+          event_id: eventId,
           limit: limit.toString(),
           offset: offset.toString(),
-          end_date: queryArg?.end_date ?? undefined,
-          start_date: queryArg?.start_date ?? undefined,
         };
         return {
           url,
@@ -73,17 +62,14 @@ export const eventApiSlice = createApi({
         };
       },
       providesTags: (result) => [
-        { type: "Event" as const, id: "LIST" },
-        ...(result?.pages?.flatMap((page) =>
-          page.map(({ id }) => ({ type: "Event" as const, id })),
+        { type: "Guest" as const, id: "LIST" },
+        ...(result?.pages?.flatMap(
+          (page) =>
+            page.data?.map(({ id }) => ({ type: "Guest" as const, id })) ?? [],
         ) ?? []),
       ],
     }),
   }),
 });
 
-export const {
-  useGetEventQuery,
-  useGetEventBySlugQuery,
-  useGetEventsInfiniteQuery,
-} = eventApiSlice;
+export const { useGetGuestsInfiniteQuery } = guestApiSlice;

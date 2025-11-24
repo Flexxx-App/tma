@@ -9,6 +9,7 @@ import { IGuest } from "@/entities/guest/model/types";
 import { GuestList } from "./guest-list";
 import { Text } from "@/shared/ui";
 import { MainButton } from "@vkruglikov/react-telegram-web-app";
+import { useGetGuestsInfiniteQuery } from "@/entities/guest/model/api";
 
 const guests: IGuest[] = [
   {
@@ -32,6 +33,11 @@ const guests: IGuest[] = [
 ];
 
 export const GuestsPage = () => {
+  const eventId = localStorage.getItem("scanner_event_id");
+  const { data: guests } = useGetGuestsInfiniteQuery({
+    eventId: eventId!,
+  });
+  const guestsData = guests?.pages?.flatMap((page) => page.data ?? []) ?? [];
   return (
     <Page className="p-4 space-y-4 flex flex-col">
       <Text className="text-2xl font-bold mb-4!">Guests</Text>
@@ -41,7 +47,7 @@ export const GuestsPage = () => {
           <SearchIcon className="size-4" />
         </InputGroupAddon>
       </InputGroup>
-      <GuestList guests={guests} />
+      <GuestList guests={guestsData} />
       <MainButton text="Invite" />
     </Page>
   );

@@ -12,6 +12,7 @@ import { orderApiSlice } from "@/entities/order/model/api";
 import { photoApiSlice } from "@/entities/photo/model/api";
 import { googlePlacesApiSlice } from "@/entities/googleMap/model/api";
 import { scannerApiSlice } from "@/entities/scanner/model/api";
+import { guestApiSlice } from "@/entities/guest/model/api";
 
 const rootReducer = combineReducers({
   [authApiSlice.reducerPath]: authApiSlice.reducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   [photoApiSlice.reducerPath]: photoApiSlice.reducer,
   [googlePlacesApiSlice.reducerPath]: googlePlacesApiSlice.reducer,
   [scannerApiSlice.reducerPath]: scannerApiSlice.reducer,
+  [guestApiSlice.reducerPath]: guestApiSlice.reducer,
 });
 
 export const makeStore = () =>
@@ -35,6 +37,7 @@ export const makeStore = () =>
         photoApiSlice.middleware,
         googlePlacesApiSlice.middleware,
         scannerApiSlice.middleware,
+        guestApiSlice.middleware,
       ),
   });
 

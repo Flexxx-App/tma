@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { MainButton } from "@vkruglikov/react-telegram-web-app";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
+import { useIsClient } from "@/app/_providers/is-client-ctx";
 
 export const ScannerLoginPage = () => {
   const [authScanner, { isLoading }] = useAuthScannerMutation();
@@ -21,13 +22,16 @@ export const ScannerLoginPage = () => {
       password: "",
     },
   });
+  const isClient = useIsClient();
+
   const eventId = useMemo<string | null>(() => {
+    if (!isClient) return null;
     const tg = (window as any)?.Telegram?.WebApp;
     if (tg && tg.initDataUnsafe) {
       return tg.initDataUnsafe.start_param;
     }
     return null;
-  }, []);
+  }, [isClient]);
 
   const onSubmit = async ({ password, eventId, device_name }: IAuthScanner) => {
     await authScanner({
