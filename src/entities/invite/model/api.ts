@@ -40,7 +40,23 @@ export const inviteApiSlice = createApi({
       }),
       invalidatesTags: ["Invite"],
     }),
+    acceptInvite: builder.mutation<IInvite, string, undefined>({
+      query: (invitationId) => ({
+        url: `/accept`,
+        method: "POST",
+        data: {
+          invitation_id: invitationId,
+        },
+      }),
+      invalidatesTags: (_result, _error, id) => [
+        { type: "Invite" as const, id },
+      ],
+    }),
   }),
 });
 
-export const { useGetInviteQuery, useCreateInviteMutation } = inviteApiSlice;
+export const {
+  useGetInviteQuery,
+  useCreateInviteMutation,
+  useAcceptInviteMutation,
+} = inviteApiSlice;

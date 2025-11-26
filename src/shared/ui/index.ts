@@ -3,6 +3,7 @@ export * from "./choicebox";
 export * from "./menu-dock";
 export * from "./layout";
 export * from "./page";
+export * from "./card";
 export * from "./text";
 export * from "./badge";
 export * from "./qr-code";

@@ -1,9 +1,22 @@
 import type { ITicket } from "@/entities/ticket/model/types";
+import type { UUID } from "crypto";
+
+export interface IInvitationUse {
+  id: UUID;
+  created_at: string;
+  used_at: string | null;
+  user_id: UUID;
+}
 
 export interface IInvite {
-  id: string;
-  eventId: string;
-  tickets: ITicket[];
+  id: UUID;
+  created_at: string;
+  event_id: UUID;
+  max_uses: number;
+  included_products: ICreateInvitationTicket[];
+  valid_from: string | null;
+  valid_until: string | null;
+  uses: IInvitationUse[] | null;
 }
 
 export interface ICreateInvitationTicket {

@@ -72,11 +72,8 @@ export const eventApiSlice = createApi({
           params,
         };
       },
-      providesTags: (result) => [
-        { type: "Event" as const, id: "LIST" },
-        ...(result?.pages?.flatMap((page) =>
-          page.map(({ id }) => ({ type: "Event" as const, id })),
-        ) ?? []),
+      providesTags: (_result, _error, queryArg) => [
+        { type: "Event" as const, id: queryArg?.user_id ?? "LIST" },
       ],
     }),
   }),
