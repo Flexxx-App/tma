@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import { IEvent } from "@/entities/event/model/types";
 import { cn } from "@/shared/lib/utils";
 import { EventCard } from "@/entities/event/ui/event-card";
@@ -34,16 +37,24 @@ export const EventListWidget: React.FC<IProps> = ({
 }) => {
   return (
     <div className={cn("flex flex-col gap-4 p-4", className)} {...props}>
-      {Array.isArray(events) && events.length > 0 ? (
+      {(Array.isArray(events) && events.length > 0) ||
+      isLoading ||
+      (isFetchingNextPage && !hasNextPage) ? (
         <InfiniteScroll
           isLoading={isLoading}
           isFetchingNextPage={isFetchingNextPage}
           hasNextPage={hasNextPage}
           fetchNextPage={fetchNextPage}
         >
-          {events.map((event) => (
+          {events?.map((event, index) => (
             <Link key={event.id} href={`/tickets/${event.id}`}>
-              <EventCard event={event} />
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.18, delay: index * 0.03 }}
+              >
+                <EventCard event={event} />
+              </motion.div>
             </Link>
           ))}
         </InfiniteScroll>
