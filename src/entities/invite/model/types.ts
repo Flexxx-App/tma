@@ -6,9 +6,15 @@ export interface IInvite {
   tickets: ITicket[];
 }
 
-export interface ICreateInvitePayload {
-  eventId: string;
-  ticketIds: string[];
+export interface ICreateInvitationTicket {
+  product_id: string;
+  quantity: number;
 }
 
-
+export interface ICreateInvitePayload {
+  event_id: string;
+  included_products: ICreateInvitationTicket[];
+  max_uses: number;
+  valid_from: Date | null;
+  valid_until: Date | null;
+}

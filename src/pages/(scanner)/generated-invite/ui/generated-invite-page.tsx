@@ -9,12 +9,8 @@ import { MainButton } from "@vkruglikov/react-telegram-web-app";
 import { useBackButton } from "@/shared/tma/useBackButton";
 import { useGetInviteQuery } from "@/entities/invite/model/api";
 
-const TELEGRAM_MINI_APP_URL =
-  process.env.NEXT_PUBLIC_TELEGRAM_MINI_APP_URL ??
-  "https://t.me/your_bot/your_app";
-
 const generateInviteLink = (inviteId: string) => {
-  const url = new URL(TELEGRAM_MINI_APP_URL);
+  const url = new URL("https://t.me/flexxxme_bot/invitation");
   url.searchParams.set("startapp", inviteId);
   return url.toString();
 };

@@ -1,9 +1,11 @@
 import { GeneratedInvitePage as GeneratedInvitePageComponent } from "@/pages/(scanner)/generated-invite";
+import React from "react";
 
 export default function GeneratedInvitePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  return <GeneratedInvitePageComponent inviteId={params.id} />;
+  const { id } = React.use(params);
+  return <GeneratedInvitePageComponent inviteId={id} />;
 }

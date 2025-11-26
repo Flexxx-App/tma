@@ -113,14 +113,14 @@ export const TicketsSheet = ({
                             stiffness: 260,
                             damping: 20,
                           }}
-                          className="inline-flex items-center gap-1 rounded-full bg-background/80 px-2.5 py-1 text-[11px] shadow-sm"
+                          className="inline-flex items-center rounded-full font-medium select-none"
                           onClick={(event) => {
                             event.stopPropagation();
                           }}
                         >
                           <button
                             type="button"
-                            className="flex size-5 items-center justify-center rounded-full bg-muted/60 text-[11px] leading-none"
+                            className="flex size-6 items-center justify-center rounded-full bg-background/60 text-[16px] leading-none select-none"
                             onClick={() =>
                               onChangeQuantity(
                                 ticket.id,
@@ -130,24 +130,12 @@ export const TicketsSheet = ({
                           >
                             -
                           </button>
-                          <input
-                            type="number"
-                            inputMode="numeric"
-                            min={1}
-                            value={quantity}
-                            onChange={(event) => {
-                              const next = Number.parseInt(
-                                event.target.value,
-                                10,
-                              );
-                              if (Number.isNaN(next)) return;
-                              onChangeQuantity(ticket.id, Math.max(1, next));
-                            }}
-                            className="w-9 border-none bg-transparent p-0 text-center text-xs font-medium outline-none"
-                          />
+                          <Text className="text-xs font-medium w-8 text-center">
+                            {quantity}
+                          </Text>
                           <button
                             type="button"
-                            className="flex size-5 items-center justify-center rounded-full  bg-muted/60 text-[11px] leading-none"
+                            className="flex size-6 items-center justify-center rounded-full  bg-background/60 text-[16px] leading-none select-none"
                             onClick={() =>
                               onChangeQuantity(
                                 ticket.id,

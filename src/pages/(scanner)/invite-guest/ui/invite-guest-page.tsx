@@ -9,6 +9,8 @@ import { useBackButton } from "@/shared/tma/useBackButton";
 import type { GuestTicket } from "./types";
 import { TicketsSummaryCard } from "./tickets-summary-card";
 import { TicketsSheet } from "./tickets-sheet";
+import { MaxUses } from "./max-uses";
+import { ValidityPeriod } from "./validity-period";
 import { MainButton } from "@vkruglikov/react-telegram-web-app";
 import { useRouter } from "next/navigation";
 import { useGetTickets } from "@/entities/ticket/model/api";
@@ -24,6 +26,14 @@ export const InviteGuestPage = () => {
     () => new Set(),
   );
   const [isTicketsPopoverOpen, setIsTicketsPopoverOpen] = useState(false);
+  const [maxUses, setMaxUses] = useState<number>(1);
+  const [validityPeriod, setValidityPeriod] = useState<{
+    from: Date | null;
+    to: Date | null;
+  }>({
+    from: null,
+    to: null,
+  });
 
   const { data: ticketsData, isLoading: isTicketsLoading } = useGetTickets(
     {
@@ -107,16 +117,15 @@ export const InviteGuestPage = () => {
     }
 
     try {
-      const ticketIdsWithQuantity = selectedTickets.flatMap((ticket) =>
-        Array.from(
-          { length: Math.max(1, ticket.quantity ?? 1) },
-          () => ticket.id,
-        ),
-      );
-
       const invite = await createInvite({
-        eventId,
-        ticketIds: ticketIdsWithQuantity,
+        event_id: eventId ?? "",
+        included_products: selectedTickets.map((ticket) => ({
+          product_id: ticket.id,
+          quantity: ticket.quantity ?? 1,
+        })),
+        max_uses: maxUses,
+        valid_from: validityPeriod.from,
+        valid_until: validityPeriod.to,
       }).unwrap();
 
       router.push(`/scanner/guests/invite/${invite.id}`);
@@ -126,7 +135,7 @@ export const InviteGuestPage = () => {
   };
 
   return (
-    <Page className="relative flex h-full flex-col space-y-4 p-4 gap-4">
+    <Page className="relative flex h-full flex-col space-y-4 p-4 gap-2">
       <Text
         component="h1"
         className="mb-1! text-2xl font-semibold tracking-tight"
@@ -138,6 +147,13 @@ export const InviteGuestPage = () => {
         tickets={tickets}
         selectedTickets={selectedTickets}
         onOpenSelector={() => setIsTicketsPopoverOpen(true)}
+        isTicketsLoading={isTicketsLoading}
+      />
+
+      <MaxUses value={maxUses} onChange={setMaxUses} />
+      <ValidityPeriod
+        value={validityPeriod}
+        onChange={(next) => setValidityPeriod(next)}
       />
 
       <TicketsSheet
@@ -153,6 +169,7 @@ export const InviteGuestPage = () => {
       {selectedTickets.length <= 0 || isTicketsPopoverOpen ? null : (
         <MainButton
           text="Generate"
+          progress={isCreatingInvite}
           onClick={handleGenerateInvite}
           disabled={selectedTickets.length === 0 || isCreatingInvite}
         />
