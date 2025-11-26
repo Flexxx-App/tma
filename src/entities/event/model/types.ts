@@ -162,6 +162,11 @@ export interface IEvent {
   terms: IEventTerm[] | null;
 }
 
+export interface IEventsListResponse {
+  events: IEvent[];
+  total: number;
+}
+
 export interface ISlugEvent {
   id: UUID;
   name: string;

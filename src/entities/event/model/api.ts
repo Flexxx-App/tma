@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/shared/api/app";
-import type { IApiEventResponse } from "./types";
+import type { IApiEventResponse, IEventsListResponse } from "./types";
 import type { IEvent } from "@/entities/event/model/types";
 
 interface IEventsPageParam {
@@ -26,7 +26,7 @@ export const eventApiSlice = createApi({
       query: (slug) => ({ url: `/slug/${slug}` }),
     }),
     getEvents: builder.infiniteQuery<
-      IEvent[],
+      IEventsListResponse,
       IEventsQueryArg,
       IEventsPageParam
     >({
@@ -37,8 +37,8 @@ export const eventApiSlice = createApi({
         },
         getNextPageParam: (lastPage, _allPages, lastPageParam) => {
           const nextOffset = lastPageParam.offset + lastPageParam.limit;
-          const remainingItems = (lastPage?.length ?? 0) - nextOffset;
-          if (remainingItems <= 0) {
+          const total = lastPage?.total ?? 0;
+          if (nextOffset >= total) {
             return undefined;
           }
           return {

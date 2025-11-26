@@ -77,8 +77,11 @@ export const EventTicketsPage: React.FC<IProps> = ({ className, ...props }) => {
   const selectFromResult = (state: any) => {
     const { data, isLoading, isFetchingNextPage, hasNextPage } = state;
     return {
-      events: data?.pages.flatMap((page: IEvent[]) => page) ?? [],
-      total: data?.pages.flatMap((page: IEvent[]) => page.length) ?? 0,
+      events:
+        data?.pages.flatMap(
+          (page: { events: IEvent[]; total: number }) => page.events,
+        ) ?? [],
+      total: data?.pages?.[0]?.total ?? 0,
       isLoading,
       isFetchingNextPage,
       hasNextPage,

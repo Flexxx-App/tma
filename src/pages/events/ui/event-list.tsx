@@ -35,18 +35,18 @@ export const EventListWidget: React.FC<IProps> = ({
   fetchNextPage,
   ...props
 }) => {
+  const hasEvents = events.length > 0;
+
   return (
     <div className={cn("flex flex-col gap-4 p-4", className)} {...props}>
-      {(Array.isArray(events) && events.length > 0) ||
-      isLoading ||
-      (isFetchingNextPage && !hasNextPage) ? (
+      {hasEvents || isLoading || (isFetchingNextPage && !hasNextPage) ? (
         <InfiniteScroll
           isLoading={isLoading}
           isFetchingNextPage={isFetchingNextPage}
           hasNextPage={hasNextPage}
           fetchNextPage={fetchNextPage}
         >
-          {events?.map((event, index) => (
+          {events.map((event, index) => (
             <Link key={event.id} href={`/tickets/${event.id}`}>
               <motion.div
                 initial={{ opacity: 0, y: 6 }}
