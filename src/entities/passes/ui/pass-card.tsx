@@ -55,7 +55,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
   const { totp_secret } = pass;
   const normalizedStatus = isPassStatus(pass.status) ? pass.status : "valid";
   const timeStep = 15;
-  const [code, setCode] = useState(() => generateTOTP(totp_secret, timeStep));
+  const [code, setCode] = useState<string | null>(null);
   const [secondsLeft, setSecondsLeft] = useState(() => {
     const now = Math.floor(Date.now() / 1000);
     return timeStep - (now % timeStep);
@@ -66,11 +66,12 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
   const fadeDurationMs = 250;
 
   useEffect(() => {
-    const update = () => {
+    const update = async () => {
       const now = Math.floor(Date.now() / 1000);
       setSecondsLeft(timeStep - (now % timeStep));
       if (now % timeStep === 0) {
-        setCode(generateTOTP(totp_secret, timeStep));
+        const code = await generateTOTP(totp_secret, timeStep);
+        setCode(String(code));
       }
     };
 
@@ -146,7 +147,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
           {passStatusLabel[normalizedStatus]}
         </Badge>
         <Text className="text-base font-semibold tracking-tight">
-          {pass.acquisition_type}
+          {pass.name}
         </Text>
         {pass.valid_from || pass.valid_until ? (
           <div className="flex items-center gap-2">

@@ -1,6 +1,9 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/shared/api/app";
-import type { IPassesResponse } from "@/entities/passes/model/types";
+import type {
+  IPassesResponse,
+  IScanPassResponse,
+} from "@/entities/passes/model/types";
 
 export const passesApiSlice = createApi({
   reducerPath: "passesApi",
@@ -17,7 +20,20 @@ export const passesApiSlice = createApi({
         { type: "Pass" as const, id: eventId ?? "LIST" },
       ],
     }),
+    scanPass: builder.mutation<
+      IScanPassResponse,
+      { passId: string; validationCode: string }
+    >({
+      query: ({ passId, validationCode }) => ({
+        url: `/scan`,
+        method: "POST",
+        data: {
+          id: passId,
+          validation_code: validationCode,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetPassesQuery } = passesApiSlice;
+export const { useGetPassesQuery, useScanPassMutation } = passesApiSlice;
