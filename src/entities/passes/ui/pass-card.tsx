@@ -11,16 +11,51 @@ import QRCodeStyling from "qr-code-styling";
 import AppLogo from "@/shared/assets/logo.jpg";
 import { Clock } from "lucide-react";
 import { formatValidDateTime } from "../lib/formatValidDate";
+import { cva } from "class-variance-authority";
 
 interface IProps {
   className?: string;
   pass: IPass;
 }
 
+type PassStatus = "valid" | "revoked" | "scanned";
+
+const passStatusBadgeVariants = cva("text-xs font-medium", {
+  variants: {
+    status: {
+      valid: "bg-green-500/10 text-green-500",
+      scanned: "bg-yellow-500/10 text-yellow-500",
+      revoked: "bg-red-500/10 text-red-500",
+    },
+  },
+  defaultVariants: {
+    status: "valid",
+  },
+});
+
+const passStatusLabel: Record<PassStatus, string> = {
+  valid: "Valid",
+  revoked: "Revoked",
+  scanned: "Scanned",
+};
+
+const passStatusVariant: Record<
+  PassStatus,
+  "default" | "outline" | "destructive"
+> = {
+  valid: "default",
+  scanned: "outline",
+  revoked: "destructive",
+};
+
+const isPassStatus = (status: string): status is PassStatus =>
+  ["valid", "revoked", "scanned"].includes(status as PassStatus);
+
 export const PassCard = ({ className, pass, ...props }: IProps) => {
-  const { secret } = pass;
+  const { totp_secret } = pass;
+  const normalizedStatus = isPassStatus(pass.status) ? pass.status : "valid";
   const timeStep = 15;
-  const [code, setCode] = useState(() => generateTOTP(secret, timeStep));
+  const [code, setCode] = useState(() => generateTOTP(totp_secret, timeStep));
   const [secondsLeft, setSecondsLeft] = useState(() => {
     const now = Math.floor(Date.now() / 1000);
     return timeStep - (now % timeStep);
@@ -35,7 +70,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
       const now = Math.floor(Date.now() / 1000);
       setSecondsLeft(timeStep - (now % timeStep));
       if (now % timeStep === 0) {
-        setCode(generateTOTP(secret, timeStep));
+        setCode(generateTOTP(totp_secret, timeStep));
       }
     };
 
@@ -43,19 +78,18 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
     const interval = setInterval(update, 1000);
 
     return () => clearInterval(interval);
-  }, [secret]);
+  }, [totp_secret]);
 
   const data = useMemo(
     () => ({
       pass: {
         id: pass.id,
-        eventId: pass.eventId,
-        userId: pass.userId,
-        createdAt: pass.createdAt,
+        guest_id: pass.guest_id,
+        created_at: pass.created_at,
       },
       validationCode: code,
     }),
-    [pass.id, pass.eventId, pass.userId, pass.createdAt, code]
+    [pass.id, pass.guest_id, pass.created_at, code],
   );
 
   // Create QR instance once
@@ -100,31 +134,26 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
       className={cn(
         "w-fit mx-auto max-w-md border rounded-2xl bg-card/50 backdrop-blur p-6 shadow-sm",
         "flex flex-col items-center justify-center gap-2",
-        className
+        className,
       )}
       {...props}
     >
       <div className="flex flex-col items-center gap-2">
         <Badge
-          variant={pass.status === "active" ? "default" : "outline"}
-          className={cn(
-            "text-xs font-medium",
-            pass.status === "active"
-              ? "bg-green-500/10 text-green-500"
-              : "bg-yellow-500/10 text-muted-foreground"
-          )}
+          variant={passStatusVariant[normalizedStatus]}
+          className={cn(passStatusBadgeVariants({ status: normalizedStatus }))}
         >
-          {pass.status === "active" ? "Active" : "Scanned"}
+          {passStatusLabel[normalizedStatus]}
         </Badge>
         <Text className="text-base font-semibold tracking-tight">
-          {pass.name}
+          {pass.acquisition_type}
         </Text>
-        {pass.validFrom || pass.validTo ? (
+        {pass.valid_from || pass.valid_until ? (
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-muted-foreground" />
             <Text className="text-muted-foreground text-xs">
-              {formatValidDateTime(pass.validFrom || "", userLocale)} -{" "}
-              {formatValidDateTime(pass.validTo || "", userLocale)}
+              {formatValidDateTime(pass.valid_from || "", userLocale)} -{" "}
+              {formatValidDateTime(pass.valid_until || "", userLocale)}
             </Text>
           </div>
         ) : null}
@@ -134,7 +163,7 @@ export const PassCard = ({ className, pass, ...props }: IProps) => {
           ref={ref}
           className={cn(
             "rounded-lg overflow-hidden transition-opacity duration-300 ease-in-out will-change-auto",
-            isFading ? "opacity-0" : "opacity-100"
+            isFading ? "opacity-0" : "opacity-100",
           )}
         />
       </div>

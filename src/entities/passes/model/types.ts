@@ -1,11 +1,15 @@
 export interface IPass {
   id: string;
-  eventId: string;
-  userId: string;
-  name: string;
-  status: "active" | "scanned";
-  createdAt: string;
-  secret: string;
-  validFrom?: string;
-  validTo?: string;
+  guest_id: string;
+  created_at: string;
+  totp_secret: string;
+  valid_from: string | null;
+  valid_until: string | null;
+  status: string;
+  acquisition_type: string;
+}
+
+export interface IPassesResponse {
+  passes: IPass[];
+  total: number;
 }

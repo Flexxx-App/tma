@@ -15,6 +15,7 @@ import { scannerApiSlice } from "@/entities/scanner/model/api";
 import { guestApiSlice } from "@/entities/guest/model/api";
 import { ticketApiSlice } from "@/entities/ticket/model/api";
 import { inviteApiSlice } from "@/entities/invite/model/api";
+import { passesApiSlice } from "@/entities/passes/model/api";
 
 const rootReducer = combineReducers({
   [authApiSlice.reducerPath]: authApiSlice.reducer,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   [guestApiSlice.reducerPath]: guestApiSlice.reducer,
   [ticketApiSlice.reducerPath]: ticketApiSlice.reducer,
   [inviteApiSlice.reducerPath]: inviteApiSlice.reducer,
+  [passesApiSlice.reducerPath]: passesApiSlice.reducer,
 });
 
 export const makeStore = () =>
@@ -44,6 +46,7 @@ export const makeStore = () =>
         guestApiSlice.middleware,
         ticketApiSlice.middleware,
         inviteApiSlice.middleware,
+        passesApiSlice.middleware,
       ),
   });
 

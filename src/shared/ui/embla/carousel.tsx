@@ -77,7 +77,7 @@ export const EmblaCarousel: React.FC<PropType> = (props) => {
           const opacityClamped = numberWithinRange(
             0.4 + (scaleClamped - 0.9) * 6,
             0.4,
-            1
+            1,
           );
           const tweenNode = tweenNodes.current[slideIndex];
           tweenNode.style.transform = `scale(${scaleClamped.toString()})`;
@@ -85,7 +85,7 @@ export const EmblaCarousel: React.FC<PropType> = (props) => {
         });
       });
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export const EmblaCarousel: React.FC<PropType> = (props) => {
       setScrollSnaps(
         snaps.length > 0
           ? snaps
-          : Array.from({ length: childrenCount }, (_, i) => i)
+          : Array.from({ length: childrenCount }, (_, i) => i),
       );
       onSelect();
     };
@@ -129,7 +129,7 @@ export const EmblaCarousel: React.FC<PropType> = (props) => {
         <div className="flex [touch-action:pan-y_pinch-zoom] gap-4">
           {React.Children.map(children, (child, index) => (
             <div
-              className="transform-gpu grow-0 shrink-0 basis-[50%] min-w-0 flex justify-center"
+              className="transform-gpu grow-0 shrink-0 basis-[100%] min-w-0 flex justify-center"
               key={index}
             >
               <div className="embla__slide__number w-full [backface-visibility:hidden] origin-center transition-[transform,opacity] duration-300 ease-out will-change-transform">

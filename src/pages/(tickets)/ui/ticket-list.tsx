@@ -1,7 +1,7 @@
 import { cn } from "@/shared/lib/utils";
 import { PassCard } from "@/entities/passes/ui/pass-card";
 import { IPass } from "@/entities/passes/model/types";
-import { EmblaCarousel } from "@/shared/ui";
+import { EmblaCarousel, Text } from "@/shared/ui";
 import { EmblaOptionsType } from "embla-carousel";
 
 interface IProps {
@@ -16,7 +16,7 @@ export const TicketList = ({ className, passes, ...props }: IProps) => {
     <div
       className={cn(
         "flex flex-col gap-2 justify-center items-center -mt-20",
-        className
+        className,
       )}
       {...props}
     >
