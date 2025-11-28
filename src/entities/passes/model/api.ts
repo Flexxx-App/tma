@@ -4,6 +4,7 @@ import type {
   IPassesResponse,
   IScanPassResponse,
   ITransferPassesResponse,
+  IClaimPassesResponse,
 } from "@/entities/passes/model/types";
 
 type TransferPassesRequest = {
@@ -50,6 +51,18 @@ export const passesApiSlice = createApi({
         },
       }),
     }),
+    claimPasses: builder.mutation<
+      IClaimPassesResponse,
+      { transfer_token: string }
+    >({
+      query: ({ transfer_token }) => ({
+        url: `/claim`,
+        method: "POST",
+        data: {
+          transfer_token,
+        },
+      }),
+    }),
   }),
 });
 
@@ -57,4 +70,5 @@ export const {
   useGetPassesQuery,
   useScanPassMutation,
   useTransferPassesMutation,
+  useClaimPassesMutation,
 } = passesApiSlice;

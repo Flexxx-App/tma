@@ -10,13 +10,26 @@ import { useBackButton } from "@/shared/tma/useBackButton";
 import { TransferQrCard } from "./transfer-qr-card";
 import { ShareTransferCard } from "./share-transfer-card";
 
+// Telegram startapp параметр не любит точки в значении, поэтому
+// при генерации ссылки мы целиком кодируем токен в base64url-строку
+// (A-Z, a-z, 0-9, "-", "_"), где точек уже не будет.
+const encodeTokenForTelegram = (token: string) => {
+  // стандартный base64 -> base64url
+  const base64 =
+    typeof btoa === "function"
+      ? btoa(token)
+      : Buffer.from(token, "utf-8").toString("base64");
+  return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+};
+
 const generateTransferLink = (token: string, fallbackLink?: string) => {
   if (fallbackLink) {
     return fallbackLink;
   }
 
-  const url = new URL("https://t.me/flexxxme_bot/ticket_transfer");
-  url.searchParams.set("startapp", token);
+  const url = new URL("https://t.me/flexxxme_bot/claim_passes");
+  console.log(token);
+  url.searchParams.set("startapp", encodeTokenForTelegram(token));
   return url.toString();
 };
 

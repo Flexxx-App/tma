@@ -43,3 +43,13 @@ export interface IScanPassResponse {
 export interface ITransferPassesResponse {
   transfer_token: string;
 }
+
+export interface IClaimPassesResponse {
+  passes: IPass[];
+  event?: {
+    id: string;
+    name: string;
+    date?: string | null;
+    location?: string | null;
+  };
+}
