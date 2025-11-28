@@ -1,47 +1,32 @@
-import { EmblaCarousel, Page, Skeleton } from "@/shared/ui";
+"use client";
+
+import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import { Page } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
+import {
+  useGetPassesQuery,
+  useTransferPassesMutation,
+} from "@/entities/passes/model/api";
 import { TicketList } from "./ticket-list";
-import { useGetPassesQuery } from "@/entities/passes/model/api";
+import { TicketListLoading } from "./ticket-list-loading";
+import { PassesSheet } from "./passes-sheet";
+import { MainButton } from "@vkruglikov/react-telegram-web-app";
 
 interface IProps {
   className?: string;
   eventId: string;
 }
 
-const SKELETON_PASSES_COUNT = 1;
-
-const TicketListLoading = () => {
-  return (
-    <div className="flex flex-col gap-2 justify-center items-center -mt-20 w-full">
-      {Array.from({ length: SKELETON_PASSES_COUNT }).map((_, index) => (
-        <div
-          key={index}
-          className="w-fit mx-auto max-w-md border rounded-2xl bg-card/50 backdrop-blur p-6 shadow-sm flex flex-col items-center justify-center gap-2"
-        >
-          <div className="flex flex-col items-center gap-2">
-            <Skeleton className="h-5 w-16 rounded-full" />
-            <Skeleton className="h-5 w-32 rounded-md" />
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-4 w-4 rounded-full" />
-              <Skeleton className="h-4 w-40 rounded-md" />
-            </div>
-          </div>
-          <div className="size-60 rounded-xl bg-card p-2 ring-border shadow-sm flex justify-center items-center">
-            <Skeleton className="h-full w-full rounded-lg" />
-          </div>
-          <div className="flex flex-col items-center justify-center gap-2 overflow-hidden w-full">
-            <div className="w-56">
-              <Skeleton className="h-1.5 w-full rounded-full" />
-            </div>
-            <Skeleton className="h-4 w-48 rounded-md" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
 export function TicketsPage({ className, eventId, ...props }: IProps) {
+  const router = useRouter();
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [selectedPassIds, setSelectedPassIds] = useState<Set<string>>(
+    () => new Set(),
+  );
+
   const { passes, isLoading } = useGetPassesQuery(eventId, {
     skip: !eventId,
     selectFromResult: (result) => {
@@ -53,7 +38,57 @@ export function TicketsPage({ className, eventId, ...props }: IProps) {
       };
     },
   });
+
+  const [transferPasses, { isLoading: isTransferLoading }] =
+    useTransferPassesMutation();
+
+  const hasPasses = passes.length > 0;
   const isInitialLoading = isLoading && passes.length === 0;
+
+  const handleTogglePass = useCallback((id: string) => {
+    setSelectedPassIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedPassIds(new Set());
+  }, []);
+
+  const handleCloseSheet = useCallback(() => {
+    setIsSheetOpen(false);
+  }, []);
+
+  const isConfirmEnabled = useMemo(
+    () => selectedPassIds.size > 0 && !isTransferLoading,
+    [selectedPassIds.size, isTransferLoading],
+  );
+
+  const handleConfirmTransfer = useCallback(async () => {
+    if (!selectedPassIds.size) return;
+
+    try {
+      const passesPayload = Array.from(selectedPassIds).map((id) => ({ id }));
+      const result = await transferPasses({ passes: passesPayload }).unwrap();
+
+      const searchParams = new URLSearchParams();
+      searchParams.set("token", result.transfer_token);
+
+      router.push(`/tickets/transfer?${searchParams.toString()}`);
+
+      setIsSheetOpen(false);
+      setSelectedPassIds(new Set());
+    } catch (_error) {
+      toast.error("Failed to transfer passes. Please try again.");
+    }
+  }, [router, selectedPassIds, transferPasses]);
+
   return (
     <Page
       className={cn(
@@ -67,6 +102,28 @@ export function TicketsPage({ className, eventId, ...props }: IProps) {
       ) : (
         <TicketList passes={passes} />
       )}
+
+      <PassesSheet
+        passes={passes}
+        selectedPassIds={selectedPassIds}
+        isOpen={isSheetOpen}
+        onClose={handleCloseSheet}
+        onTogglePass={handleTogglePass}
+        onClearSelection={handleClearSelection}
+      />
+
+      <MainButton
+        text={isSheetOpen ? "Send" : "Transfer"}
+        progress={isTransferLoading}
+        onClick={() => {
+          if (!hasPasses || isTransferLoading) return;
+          if (!isSheetOpen) {
+            setIsSheetOpen(true);
+          } else if (isConfirmEnabled) {
+            void handleConfirmTransfer();
+          }
+        }}
+      />
     </Page>
   );
 }

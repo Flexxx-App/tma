@@ -3,7 +3,12 @@ import { axiosBaseQuery } from "@/shared/api/app";
 import type {
   IPassesResponse,
   IScanPassResponse,
+  ITransferPassesResponse,
 } from "@/entities/passes/model/types";
+
+type TransferPassesRequest = {
+  passes: { id: string }[];
+};
 
 export const passesApiSlice = createApi({
   reducerPath: "passesApi",
@@ -33,7 +38,23 @@ export const passesApiSlice = createApi({
         },
       }),
     }),
+    transferPasses: builder.mutation<
+      ITransferPassesResponse,
+      TransferPassesRequest
+    >({
+      query: ({ passes }) => ({
+        url: `/transfer`,
+        method: "POST",
+        data: {
+          passes,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetPassesQuery, useScanPassMutation } = passesApiSlice;
+export const {
+  useGetPassesQuery,
+  useScanPassMutation,
+  useTransferPassesMutation,
+} = passesApiSlice;

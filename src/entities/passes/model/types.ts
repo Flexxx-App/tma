@@ -39,3 +39,7 @@ export interface IScanPassResponse {
     name: string;
   };
 }
+
+export interface ITransferPassesResponse {
+  transfer_token: string;
+}
