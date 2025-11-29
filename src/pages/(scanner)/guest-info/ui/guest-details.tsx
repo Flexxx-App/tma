@@ -1,9 +1,10 @@
 import { cn } from "@/shared/lib/utils";
 import { Text } from "@/shared/ui";
+import { IGuest } from "@/entities/guest/model/types";
 
 interface IGuestDetailItemProps {
   label: string;
-  value: string;
+  value: string | number;
   isLast?: boolean;
 }
 
@@ -16,14 +17,12 @@ const GuestDetailItem = ({ label, value }: IGuestDetailItemProps) => {
   );
 };
 
-export const GuestDetails = () => {
+export const GuestDetails = ({ guest }: { guest: IGuest }) => {
+  const gender = guest.gender === "male" ? "Male" : "Female";
   return (
     <div className="flex flex-col gap-2 bg-card rounded-md p-4">
-      <GuestDetailItem label="Email" value="john.doe@example.com" />
-      <GuestDetailItem label="Phone" value="1234567890" />
-      <GuestDetailItem label="Gender" value="Male" />
-      <GuestDetailItem label="Age" value="25 y.o." />
-      <GuestDetailItem label="Location" value="United States" />
+      <GuestDetailItem label="Gender" value={gender} />
+      <GuestDetailItem label="Age" value={`${guest.age} y.o.`} />
     </div>
   );
 };

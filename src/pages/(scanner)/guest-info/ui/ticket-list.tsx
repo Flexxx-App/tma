@@ -1,14 +1,9 @@
 import { cn } from "@/shared/lib/utils";
 import { Text } from "@/shared/ui";
-
-export interface ITicket {
-  id: string;
-  name: string;
-  quantity: number;
-}
+import { IPass } from "@/entities/guest/model/types";
 
 interface ITicketListProps {
-  tickets: ITicket[];
+  passes: IPass[];
 }
 
 interface ITicketItemProps {
@@ -25,14 +20,14 @@ const TicketItem = ({ name, quantity }: ITicketItemProps) => {
   );
 };
 
-export const TicketList = ({ tickets }: ITicketListProps) => {
+export const TicketList = ({ passes }: ITicketListProps) => {
   return (
     <div className="flex flex-col gap-2 bg-card rounded-md p-4">
-      {tickets.map((ticket) => (
+      {passes.map((pass) => (
         <TicketItem
-          key={ticket.id}
-          name={ticket.name}
-          quantity={ticket.quantity || 1}
+          key={pass.id}
+          name={pass.name}
+          quantity={pass.quantity || 1}
         />
       ))}
     </div>

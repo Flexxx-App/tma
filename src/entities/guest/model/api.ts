@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/shared/api/app";
-import { IGuestsResponse } from "@/entities/guest/model/types";
+import { IGuestsResponse, IGuest } from "@/entities/guest/model/types";
 
 interface IGuestsPageParam {
   offset: number;
@@ -16,6 +16,10 @@ export const guestApiSlice = createApi({
   baseQuery: axiosBaseQuery({ baseUrl: "/guests" }),
   tagTypes: ["Guest"],
   endpoints: (builder) => ({
+    getGuest: builder.query<IGuest, string>({
+      query: (id) => ({ url: `/${id}` }),
+      providesTags: (result, error, id) => [{ type: "Guest" as const, id }],
+    }),
     getGuests: builder.infiniteQuery<
       IGuestsResponse,
       IGuestsQueryArg,
@@ -72,4 +76,4 @@ export const guestApiSlice = createApi({
   }),
 });
 
-export const { useGetGuestsInfiniteQuery } = guestApiSlice;
+export const { useGetGuestsInfiniteQuery, useGetGuestQuery } = guestApiSlice;
